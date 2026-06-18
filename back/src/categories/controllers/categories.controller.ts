@@ -6,20 +6,20 @@ import { PaginatedResult } from 'src/shared/paginacion.type';
 import { UpdateCategory } from '../dto/update-categories.dto';
 import { CreateCategory } from '../dto/create-categories.dto';
 import { ProductEntity } from 'src/products/entities/ProductEntity';
+import { RequestCategoryDto } from '../dto/requestCategory.dto';
 
 @Controller('categories')
 export class CategoriesController {
     constructor( private readonly categoriesService: CategoriesService){}
 
     @Get()
-    async findAll(@Query('page') page?: string, @Query('limit') limit?: string): Promise<Category[] | PaginatedResult<Category>>{
-        if (page !== undefined && limit !== undefined) return await this.categoriesService.findAllPages(Number(page), Number(limit));
-        return await this.categoriesService.findAll();
+    async findAll(@Query() params: RequestCategoryDto): Promise<PaginatedResult<Category>>{
+        return await this.categoriesService.findAll(params);
     }
 
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<Category | undefined> {
-        return await this.categoriesService.findBy(Number(id));
+        return await this.categoriesService.findOneById(+id);
     }
 
     @Get(':id/products')

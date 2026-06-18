@@ -10,7 +10,7 @@ import { PaginatedResult } from 'src/shared/paginacion.type';
 import { UpdateProduct } from '../dto/update-product.dto';
 import { CreateProduct } from '../dto/create-Product.dto';
 import { ProductEntity } from '../entities/ProductEntity';
-import { PaginateDto } from '../dto/pagination.dto';
+import { RequestProductDto } from '../dto/requestProduct.dto';
 
 @Injectable()
 export class ProductsService {
@@ -19,9 +19,13 @@ export class ProductsService {
     private readonly productsRepository: ProductsRepository,
   ) {}
 
-  async findAll(pagination: PaginateDto): Promise<PaginatedResult<ProductEntity>> {
-    const products = await this.productsRepository.findAll(pagination.page, pagination.limit, pagination.name, pagination.orderBy, pagination.order, pagination.categoryId);
+  async findAll(pagination: RequestProductDto): Promise<PaginatedResult<ProductEntity>> {
+    const products = await this.productsRepository.findAll(pagination.page, pagination.limit, pagination.order, pagination.name, pagination.orderBy, pagination.categoryId);
     return products
+  }
+
+  async findAllByCategory(categoryId: number) {
+    return this.productsRepository.findAllByCategory(categoryId);
   }
 
   async findOne(id: number): Promise<ProductEntity> {

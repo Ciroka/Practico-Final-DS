@@ -13,7 +13,7 @@ export class TypeOrmProductsRepository implements ProductsRepository {
     private readonly productsRepository: Repository<ProductEntity>,
   ) {}
 
-  async findAll(page: number, limit: number, name?: string, orderBy?: string, order: string = 'asc', categoryId?: number): Promise<PaginatedResult<ProductEntity>> {
+  async findAll(page: number, limit: number,  order: 'asc' | 'desc', name?: string, orderBy?: string, categoryId?: number): Promise<PaginatedResult<ProductEntity>> {
     const query = await this.queryBuilder(name, orderBy, order, categoryId)
     
         const offset = (page - 1) * limit
@@ -27,6 +27,10 @@ export class TypeOrmProductsRepository implements ProductsRepository {
             totalPages: Math.ceil(total / limit)
         }}
         return paginationResult;
+    }
+
+    async findAllByCategory(categoryId: number): Promise<ProductEntity[]> {
+        return this.productsRepository.find({where: {category: {id: categoryId}}})
     }
 
     async queryBuilder(name?: string, orderBy?: string, order: string = 'asc', categoryId?: number){
