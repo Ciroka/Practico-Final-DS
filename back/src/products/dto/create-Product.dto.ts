@@ -1,7 +1,6 @@
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength } from "class-validator";
 import { Category } from "src/categories/category.types";
 
-
 export class CreateProduct {
     
     @IsString()

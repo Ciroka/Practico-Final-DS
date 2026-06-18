@@ -14,7 +14,7 @@ import { PaginatedResult } from '../../shared/paginacion.type';
 import { CreateProduct } from '../dto/create-Product.dto';
 import { UpdateProduct } from '../dto/update-product.dto';
 import { ProductEntity } from '../entities/ProductEntity';
-import { PaginateDto } from '../dto/pagination.dto';
+import { QueryParamsProductDto } from '../dto/pagination.dto';
 import { UpdateStock } from '../dto/update-stock.dto';
 
 @Controller('products')
@@ -22,8 +22,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  async findAll(@Query() paginationDto: PaginateDto): Promise <PaginatedResult<ProductEntity>> {
-    const products = await this.productsService.findAll(paginationDto);
+  async findAll(@Query() params: QueryParamsProductDto): Promise <PaginatedResult<ProductEntity>> {
+    const products = await this.productsService.findAll(params);
     return products;
   }
 

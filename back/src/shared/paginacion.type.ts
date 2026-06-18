@@ -1,10 +1,9 @@
-
-export type PaginatedResult<T>  = {
-    data: T[],
+export type PaginatedResult<T> = {
+    data: T[];
     meta: {
-        page: number, // lo  tengo
-        limit: number, // lo tengo
-        total: number, // cantidad de objetos, todos no lo que devuelvo
-        totalPages: number // total division entera() limite
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
     } 
 }
