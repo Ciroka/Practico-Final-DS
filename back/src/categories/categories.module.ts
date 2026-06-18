@@ -2,7 +2,6 @@ import { forwardRef, Global, Module } from '@nestjs/common';
 import { CategoriesService } from './services/categories.service';
 import { CategoriesController } from './controllers/categories.controller';
 import { CATEGORIES_REPOSITORY } from './repositories/categories.repository';
-//import { InMemoryCategoriesRepository } from './repositories/in-memory-categories.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryEntity } from './entity/category.entity';
 import { TypeOrmCategoryRepository } from './repositories/TypeOrmCategory.repository';

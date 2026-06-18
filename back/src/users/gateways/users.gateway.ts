@@ -6,4 +6,3 @@ export interface UsersGateway {
   fetchAll(): Promise<ExternalUser[]>;
   fetchById(id: number): Promise<ExternalUser>;
 }
-

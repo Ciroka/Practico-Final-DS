@@ -1,10 +1,11 @@
 import { Global, Module } from '@nestjs/common';
-import { UsersController } from './controllers/users.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { JsonPlaceholderUsersGateway } from './gateways/jsonplaceholder-users.gateway';
+import { LocalUsersGateway } from './gateways/local-users.gateway';
 import { USERS_GATEWAY } from './gateways/users.gateway';
 import { UsersService } from './services/users.service';
-import { LocalUsersGateway } from './gateways/local-users.gateway';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersController } from './controllers/users.controller';
 import { UserEntity } from './user.entity';
 
 @Global()
@@ -13,7 +14,8 @@ import { UserEntity } from './user.entity';
   controllers: [UsersController],
   providers: [
     UsersService,
-    { provide: USERS_GATEWAY, useFactory: () => process.env.USERS_SOURCE === 'local' 
+    {
+      provide: USERS_GATEWAY, useFactory: () => process.env.USERS_SOURCE === 'local' 
       ? new LocalUsersGateway() 
       : new JsonPlaceholderUsersGateway()
     },
