@@ -11,15 +11,11 @@ export class AuthController {
 
     @Post("register")
     async register(@Body() userRegister: UserRegister){
-
         return this.authService.register(userRegister);
-
     }
 
     @Post("login")
     async login(@Body() userLogin: UserLogin){
-
         return this.authService.login(userLogin);
-
     }
 }

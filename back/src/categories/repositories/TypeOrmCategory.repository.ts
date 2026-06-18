@@ -1,13 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { CategoriesRepository } from "./categories.repository";
 import { PaginatedResult } from "src/shared/paginacion.type";
-import { Category, CreateCategoryInput, UpdateCategoryInput } from "../category.types";
+import { Category, } from "../category.types";
 import { CategoryEntity } from "../entity/category.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateCategory } from "../dto/create-categories.dto";
-import { UpdateCategory } from "../dto/update-categories.dto";
-
 
 
 @Injectable()
@@ -16,21 +14,13 @@ export class TypeOrmCategoryRepository implements CategoriesRepository {
         @InjectRepository(CategoryEntity)
         private readonly categoriesRepository: Repository<CategoryEntity>,
     ){}
- 
-    async findAll(): Promise<Category[]> {
-        return await this.categoriesRepository.find();
-    }   
-    
-    async findAllPages(page: number = 1, limit: number = 50): Promise<PaginatedResult<Category>> {
-        const categories = await this.categoriesRepository.find();
-        
-        if (page <= 0) page = 1
-        if (limit <= 0 || limit >= 50) limit = 50
-    
+
+    async findAll(page: number, limit: number, name?: string, order?: 'asc' | 'desc'): Promise<PaginatedResult<Category>> {
         const offset = (page - 1) * limit
-        const total = categories.length
+        const query = await this.queryBuilder(name, order);
+        const [categories, total] = await query.skip(offset).take(limit).getManyAndCount();
         const paginationResult: PaginatedResult<Category> = {
-            data: categories.slice(offset, offset + limit),
+            data: categories,
             meta: {
                 page,
                 limit,
@@ -41,6 +31,21 @@ export class TypeOrmCategoryRepository implements CategoriesRepository {
         return paginationResult 
     }
 
+    async queryBuilder(name?: string, order?: 'asc' | 'desc') {
+        const query = this.categoriesRepository.createQueryBuilder('categories');
+
+
+        if (name) {
+            query.where('LOWER(category.name) ILIKE :name', {name:name.toLowerCase()});
+        }
+        if (order){
+            query.orderBy('category.name', order === 'asc' ? 'ASC' : 'DESC');
+        }
+        
+        return query
+
+    }
+
     async findById(id: number): Promise<Category | undefined> {
         const category = await this.categoriesRepository.findOneBy({id});
         if (!category) return undefined;
@@ -49,26 +54,14 @@ export class TypeOrmCategoryRepository implements CategoriesRepository {
     
     async create(input: CreateCategory): Promise<Category> {
         const category = await this.categoriesRepository.save(input);
-        
         return category
     }
 
-    async update(id: number, input: UpdateCategory): Promise<Category | undefined> {
-        const category = await this.categoriesRepository.findOneBy({id});
-        if(!category) return undefined;
-
-        if (input.name !== undefined) category.name = input.name;
-        
-        await this.categoriesRepository.save(category);
-        
-        return category;
+    async update(category: CategoryEntity): Promise<Category> {
+        return this.categoriesRepository.save(category);
     }
 
-    async remove(id: number): Promise<Category | undefined> {
-        const category = await this.categoriesRepository.findOneBy({id});
-        if(!category) return undefined;
-
-        await this.categoriesRepository.delete(id); 
-        return category;
+    async remove(category: CategoryEntity): Promise<Category> {
+        return this.categoriesRepository.remove(category); 
     }
 }

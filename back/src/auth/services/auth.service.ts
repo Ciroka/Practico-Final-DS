@@ -33,7 +33,7 @@ export class AuthService {
             passwordHash,
             role,
         });
-        return await this.usersRepo.save(entity);
+        return this.usersRepo.save(entity);
     }
 
     async login(userLogin: UserLogin){

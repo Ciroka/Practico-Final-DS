@@ -14,7 +14,7 @@ import { PaginatedResult } from '../../shared/paginacion.type';
 import { CreateProduct } from '../dto/create-Product.dto';
 import { UpdateProduct } from '../dto/update-product.dto';
 import { ProductEntity } from '../entities/ProductEntity';
-import { PaginateDto } from '../dto/pagination.dto';
+import { PaginateDto } from '../dto/requestProduct.dto';
 import { UpdateStock } from '../dto/update-stock.dto';
 
 @Controller('products')
