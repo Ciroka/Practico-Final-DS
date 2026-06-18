@@ -1,0 +1,5 @@
+docs/
+back/dist/
+back/node_modules/
+.env
+front/node_modules/
