@@ -7,7 +7,7 @@ import {
   Product,
   QueryProductsDto,
   PaginatedProducts,
-} from '../models/product';
+} from '../interfaces/product';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
