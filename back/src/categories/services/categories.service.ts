@@ -36,7 +36,7 @@ export class CategoriesService {
 
     async findProducts(id: number): Promise<ProductEntity[]>{
         this.findBy(id);
-        const products = await this.productsService.findAll(undefined, undefined, undefined, id);
+        const products = await this.productsService.findAll();
         if(!products) throw new NotFoundException ('Products not found.')
         return products
     }
