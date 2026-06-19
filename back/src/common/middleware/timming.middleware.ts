@@ -7,13 +7,12 @@ export class TimmingMiddleware implements NestMiddleware {
         const startAt = Date.now();
         const originalSend = res.send.bind(res);
 
-        res.send = function (body: unknown) {
+        res.send = function(body: unknown) {
             const ms = Date.now() - startAt;
             res.setHeader('X-Response-Time', `${ms} ms`);
             return originalSend(body);
         };
 
         next();
-        
     }
 }

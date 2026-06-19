@@ -1,12 +1,10 @@
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, MaxLength, Min, MinLength } from "class-validator";
-import { Category } from "src/categories/category.types";
 
-export class CreateProduct {
-    
+export class CreateProductDto {
     @IsString()
+    @IsNotEmpty()
     @MinLength(2)
     @MaxLength(100) 
-    @IsNotEmpty()
     name!: string;
     
     @IsNumber()
@@ -17,6 +15,7 @@ export class CreateProduct {
     @Min(0)
     stock!: number;
     
+    @IsInt()
     @IsOptional()
     categoryId?: number;
 }

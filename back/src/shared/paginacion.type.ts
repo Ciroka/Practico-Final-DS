@@ -6,4 +6,4 @@ export type PaginatedResult<T> = {
         total: number;
         totalPages: number;
     } 
-}
+};

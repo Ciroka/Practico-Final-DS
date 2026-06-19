@@ -20,6 +20,6 @@ import { UserEntity } from './user.entity';
       : new JsonPlaceholderUsersGateway()
     },
   ],
-  exports: [UsersService, USERS_GATEWAY],
+  exports: [UsersService, USERS_GATEWAY]
 })
 export class UsersModule {}
