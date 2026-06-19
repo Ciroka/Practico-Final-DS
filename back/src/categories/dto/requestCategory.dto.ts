@@ -1,6 +1,6 @@
-import { RequestDto } from "src/shared/params.dto";
+import { QueryParamsDto} from "src/shared/params.dto";
 
 
-export class RequestCategoryDto extends RequestDto {
+export class RequestCategoryDto extends QueryParamsDto {
     
 }

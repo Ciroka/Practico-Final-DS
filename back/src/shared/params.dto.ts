@@ -6,6 +6,9 @@ export class QueryParamsDto {
     @Min(1)
     @Type(() => Number)
     page: number = 1;
+    
+    @IsIn(['asc', 'desc'])
+    order: 'asc' | 'desc' = 'asc';
 
     @IsInt()
     @Min(1)
@@ -16,8 +19,4 @@ export class QueryParamsDto {
     @IsOptional()
     @IsString()
     name?: string;
-
-    @IsOptional()
-    @IsIn(['asc', 'desc'])
-    order?: 'asc' | 'desc' = 'asc';
 }
