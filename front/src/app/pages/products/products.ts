@@ -2,12 +2,14 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { ProductsService } from '../../services/products.service';
-import { CategoriesService } from '../../services/categories.service';
-import { AuthService } from '../../services/auth.service';
+
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
-import { Product, CreateProductDto, UpdateProductDto } from '../../models/product';
-import { Category } from '../../models/category';
+import { CreateProductDto, UpdateProductDto } from '../../interfaces/product.interface';
+import { CategoriesService } from '../../services/categories.service';
+import { ProductsService } from '../../services/products.service';
+import { AuthService } from '../../services/auth.service';
+import { Category } from '../../models/category.model';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-products',
@@ -35,7 +37,7 @@ export class ProductsPage implements OnInit {
 
   filterName = '';
   sortBy = 'id';
-  order = 'ASC';
+  order = 'asc';
   page = 1;
   limit = 10;
   total = 0;
@@ -44,7 +46,7 @@ export class ProductsPage implements OnInit {
     this.loadProducts();
     try {
       const cats = await firstValueFrom(this.categoriesService.findAll());
-      this.categories.set(cats);
+      this.categories.set(cats.data);
     } catch { }
   }
 
@@ -55,13 +57,14 @@ export class ProductsPage implements OnInit {
       const res = await firstValueFrom(this.productsService.findAll({
         name: this.filterName || undefined,
         sortBy: this.sortBy as 'id' | 'name' | 'price' | 'stock',
-        order: this.order as 'ASC' | 'DESC',
+        order: this.order as 'asc' | 'desc',
         page: this.page,
         limit: this.limit,
       }));
-      this.products.set(res.items);
-      this.total = res.total;
-    } catch {
+      this.products.set(res.data);
+      this.total = res.meta.total;
+    } catch (err) {
+      console.log(err);
       this.error = 'Error al cargar productos';
     } finally {
       this.loading.set(false);

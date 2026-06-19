@@ -8,6 +8,7 @@ import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { ProductEntity } from '../../products/entities/product.entity';
 import { QueryParamsCategoryDto } from '../dto/params-categories.dto';
 import { CategoryEntity } from '../entity/category.entity';
+import { QueryParamsProductDto } from '../../products/dto/params-products.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -29,10 +30,9 @@ export class CategoriesService {
         return category;
     }
 
-    async findProducts(id: number): Promise<ProductEntity[]> {
+    async findProducts(id: number, params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
         await this.findOneById(id);
-        const products = await this.productsService.findAllByCategory(id);
-        return products;
+        return this.productsService.findAllByCategory(id, params);
     }
 
     async create(body: CreateCategoryDto): Promise<CategoryEntity> {
@@ -47,8 +47,9 @@ export class CategoriesService {
 
     async remove(id: number): Promise<CategoryEntity> {
         const category = await this.findOneById(id);
-        const products = await this.productsService.findAllByCategory(id);
-        if (products) throw new ConflictException('Cannot delete category with associated products.');
+        const count = await this.productsService.countByCategory(id);
+
+        if (count > 0) throw new ConflictException('Cannot delete category with associated products.');
         
         return this.categoriesRepository.remove(category);
     }

@@ -16,13 +16,13 @@ export class ProductsService {
   ) {}
 
   async findAll(params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
-    return this.productsRepository.findAll(
-      params.page, params.limit, params.order, params.orderBy, params.name, params.categoryId
-    );
+    const { page = 1, limit = 10, order, orderBy, name } = params;
+    return this.productsRepository.findAll(page, limit, order, orderBy, name);
   }
 
-  async findAllByCategory(categoryId: number) {
-    return this.productsRepository.findAllByCategory(categoryId);
+  async findAllByCategory(categoryId: number, params: QueryParamsProductDto) {
+    const { page = 1, limit = 10, order, orderBy, name } = params;
+    return this.productsRepository.findAll(page, limit, order, orderBy, name, categoryId);
   }
 
   async findOne(id: number): Promise<ProductEntity> {
@@ -57,5 +57,9 @@ export class ProductsService {
   async remove(id: number): Promise<ProductEntity> {
     const product = await this.findOne(id);
     return this.productsRepository.remove(product);
+  }
+
+  async countByCategory(id: number): Promise<number> {
+    return this.productsRepository.countByCategory(id);
   }
 }

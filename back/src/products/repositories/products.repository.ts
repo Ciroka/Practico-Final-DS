@@ -15,7 +15,7 @@ export class ProductsRepository implements IProductsRepository {
     ) {}
 
     async findAll(page: number, limit: number, order: 'asc' | 'desc', orderBy?: 'id' | 'name' | 'price' | 'stock', name?: string, categoryId?: number): Promise<PaginatedResult<ProductEntity>> {
-        const query = this.queryBuilder(name, orderBy, order, categoryId);
+        const query = this.queryBuilder(categoryId, name, orderBy, order);
         const offset = (page - 1) * limit;
 
         const [products, total] = await query.take(limit).skip(offset).getManyAndCount();
@@ -31,14 +31,6 @@ export class ProductsRepository implements IProductsRepository {
         };
 
         return paginationResult;
-    }
-
-    async findAllByCategory(categoryId: number): Promise<ProductEntity[]> {
-        return this.productsRepository.find({
-            where: {
-                category: { id: categoryId }
-            }
-        });
     }
 
     async findById(id: number): Promise<ProductEntity | undefined> {
@@ -59,8 +51,12 @@ export class ProductsRepository implements IProductsRepository {
     async remove(product: ProductEntity): Promise<ProductEntity> {
         return this.productsRepository.remove(product);
     }
+
+    async countByCategory(id: number): Promise<number> {
+        return this.queryBuilder(id).getCount();
+    }
     
-    private queryBuilder(name?: string, orderBy?: 'id' | 'name' | 'price' | 'stock', order: 'asc' | 'desc' = 'asc', categoryId?: number) {
+    private queryBuilder(categoryId?: number, name?: string, orderBy?: 'id' | 'name' | 'price' | 'stock', order: 'asc' | 'desc' = 'asc') {
         const query = this.productsRepository.createQueryBuilder('product');
 
         if (name) {

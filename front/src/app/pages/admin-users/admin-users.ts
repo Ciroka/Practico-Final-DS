@@ -3,8 +3,8 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { UsersService } from '../../services/users.service';
-import { SafeUser, UserRole } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
+import { SafeUser, UserRole } from '../../interfaces/user';
 
 @Component({
   selector: 'app-admin-users',

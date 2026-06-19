@@ -7,6 +7,7 @@ import { QueryParamsCategoryDto } from '../dto/params-categories.dto';
 import { CategoriesService } from '../services/categories.service';
 import { ProductEntity } from '../../products/entities/product.entity';
 import { CategoryEntity } from '../entity/category.entity';
+import { QueryParamsProductDto } from '../../products/dto/params-products.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -23,8 +24,8 @@ export class CategoriesController {
     }
 
     @Get(':id/products')
-    async findProducts(@Param('id') id: string): Promise<ProductEntity[]> {
-        return this.categoriesService.findProducts(Number(id));
+    async findProducts(@Param('id') id: string, @Query() params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
+        return this.categoriesService.findProducts(Number(id), params);
     }
 
     @Post()

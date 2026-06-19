@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SafeUser, UpdateUserRoleDto } from '../interfaces/user';
@@ -7,8 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private readonly api = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   findAll(): Observable<SafeUser[]> {
     return this.http.get<SafeUser[]>(`${this.api}/users`);
