@@ -21,11 +21,11 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        database: configService.get('DB_NAME'),
-        username: configService.get('DB_USERNAME'),
-        port: Number(configService.get('DB_PORT')),
-        password: configService.get('DB_PASSWORD'),
-        host: configService.get('DB_HOST'),
+        database: configService.get('POSTGRES_DB'),
+        username: configService.get('POSTGRES_USER'),
+        port: Number(configService.get('POSTGRES_PORT')),
+        password: configService.get('POSTGRES_PASSWORD'),
+        host: configService.get('POSTGRES_HOST'),
         entities: [CategoryEntity, ProductEntity, UserEntity],
         synchronize: true
       }),
@@ -35,6 +35,6 @@ import { AuthModule } from './auth/auth.module';
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer):void {
-    consumer.apply(LoggerMiddleware, TimmingMiddleware).forRoutes()
+    consumer.apply(LoggerMiddleware, TimmingMiddleware).forRoutes('*')
   }
 }
