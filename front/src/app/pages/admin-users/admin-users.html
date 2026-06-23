@@ -44,11 +44,11 @@
               <td class="text-end">
                 @if (user.id !== auth.user()?.id) {
                   @if (user.role === 'user') {
-                    <button class="btn btn-sm btn-outline-warning" (click)="changeRole(user.id, rolAdmin)">
+                    <button class="btn btn-sm btn-outline-warning" (click)="changeRole(user.id, 'admin')">
                       <i class="bi bi-shield-plus me-1"></i>Hacer admin
                     </button>
                   } @else {
-                    <button class="btn btn-sm btn-outline-secondary" (click)="changeRole(user.id, rolUser)">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="changeRole(user.id, 'user')">
                       <i class="bi bi-person me-1"></i>Hacer user
                     </button>
                   }
@@ -86,11 +86,11 @@
               <small class="text-muted">{{ user.createdAt | date:'short' }}</small>
               @if (user.id !== auth.user()?.id) {
                 @if (user.role === 'user') {
-                  <button class="btn btn-sm btn-outline-warning" (click)="changeRole(user.id, rolAdmin)">
+                  <button class="btn btn-sm btn-outline-warning" (click)="changeRole(user.id, 'admin')">
                     <i class="bi bi-shield-plus me-1"></i>Admin
                   </button>
                 } @else {
-                  <button class="btn btn-sm btn-outline-secondary" (click)="changeRole(user.id, rolUser)">
+                  <button class="btn btn-sm btn-outline-secondary" (click)="changeRole(user.id, 'user')">
                     <i class="bi bi-person me-1"></i>User
                   </button>
                 }

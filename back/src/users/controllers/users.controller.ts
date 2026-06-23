@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guards';
@@ -35,10 +35,7 @@ export class UsersController {
   @Patch(':id/role')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async updateRole(@Param('id') id: string, dto: UpdateUserRoleDto): Promise<UserResponse> {
-    console.log('update FRONT:')
-    console.log(JSON.stringify(dto));
-    console.log(dto.role);
+  async updateRole(@Param('id') id: string, @Body() dto: UpdateUserRoleDto): Promise<UserResponse> {
     return this.usersService.updateRole(id, dto);
   }
 }

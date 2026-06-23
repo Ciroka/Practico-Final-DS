@@ -5,10 +5,12 @@ export interface SafeUser {
   createdAt: Date;
 }
 
-export enum UserRole {
-    ADMIN = "admin",
-    USER = "user"
-}
+// export enum UserRole {
+//     ADMIN = "admin",
+//     USER = "user"
+// }
+
+export type UserRole = 'admin' | 'user';
 
 export interface UpdateUserRoleDto {
   role: UserRole;

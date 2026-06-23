@@ -15,9 +15,6 @@ export class UsersService {
   }
 
   updateRole(id: string, dto: UpdateUserRoleDto): Observable<SafeUser> {
-    console.log('update FRONT:')
-    console.log(JSON.stringify(dto));
-    console.log(dto.role);
     return this.http.patch<SafeUser>(`${this.api}/users/${id}/role`, dto);
   }
 }
