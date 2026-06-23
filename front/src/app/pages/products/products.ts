@@ -64,7 +64,6 @@ export class ProductsPage implements OnInit {
       this.products.set(res.items);
       this.total = res.total;
     } catch (err) {
-      console.log(err);
       this.error = 'Error al cargar productos';
     } finally {
       this.loading.set(false);
@@ -126,11 +125,10 @@ export class ProductsPage implements OnInit {
       if (this.editingProduct()) {
         const dto: UpdateProductDto = {
           name: this.formName,
-          price: this.formPrice,
+          price: parseFloat(this.formPrice.toString()), // debería ser price: this.formPrice, no sé porque debo hacer toString y parseFloat
           stock: this.formStock,
           categoryId: this.formCategoryId,
         };
-        console.log(this.formCategoryId);
         await firstValueFrom(this.productsService.update(this.editingProduct()!.id, dto));
       } else {
         const dto: CreateProductDto = {

@@ -33,7 +33,12 @@ export class ProductsRepository implements IProductsRepository {
     }
 
     async findById(id: number): Promise<ProductEntity | undefined> {
-        const product = await this.productsRepository.findOneBy({ id });
+        const product = await this.productsRepository.findOne({
+            where: { id },
+            relations: {
+                category: true
+            }
+        });
         if (!product) return undefined;
         return product;
     }
@@ -56,7 +61,8 @@ export class ProductsRepository implements IProductsRepository {
     }
     
     private queryBuilder(categoryId?: number, name?: string, sortBy?: SortEnum, order: OrderEnum = OrderEnum.ASC) {
-        const query = this.productsRepository.createQueryBuilder('product');
+        const query = this.productsRepository.createQueryBuilder('product')
+                                                .innerJoinAndSelect('product.category', 'category');
 
         if (name) {
             query.where('product.name ILIKE :name', { name: `%${name}%` });

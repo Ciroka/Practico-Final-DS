@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProductDto, QueryParamsProductDto, UpdateProductDto, UpdateStock } from '../dto/request';
 import { PRODUCTS_REPOSITORY, IProductsRepository } from '../repositories/products.repository.interface';
@@ -34,11 +34,11 @@ export class ProductsService {
 
   async update(id: number, input: UpdateProductDto): Promise<ProductEntity> {
     const product = await this.findOne(id);
-
+    
     if (input.name !== undefined) product.name = input.name;
     if (input.price !== undefined) product.price = input.price;
     if (input.stock !== undefined) product.stock = input.stock;
-    if (input.categoryId !== undefined) product.category.id = input.categoryId;
+    if (input.categoryId !== undefined) product.categoryId = input.categoryId;
 
     return this.productsRepository.update(product);
   }
