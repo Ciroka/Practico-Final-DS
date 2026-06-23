@@ -1,5 +1,5 @@
-docs/
-back/dist/
-back/node_modules/
+node_modules
 .env
-front/node_modules/
+docs/
+front/.angular
+back/dist

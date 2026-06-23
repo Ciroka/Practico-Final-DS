@@ -1,9 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
-import { ProductsService } from '../../services/products.service';
-import { CategoriesService } from '../../services/categories.service';
+
+import { AuthService, ProductsService, CategoriesService } from '../../services';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +30,7 @@ export class HomePage implements OnInit {
         firstValueFrom(this.categoriesService.findAll()),
       ]);
       this.productCount.set(res.total);
-      this.categoryCount.set(cats.length);
+      this.categoryCount.set(cats.total);
     } catch {
     } finally {
       this.loading.set(false);

@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { CategoriesService } from '../../services/categories.service';
-import { AuthService } from '../../services/auth.service';
+
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
-import { Category } from '../../models/category';
+import { CategoriesService, AuthService } from '../../services';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-categories',
@@ -33,7 +33,7 @@ export class CategoriesPage implements OnInit {
     this.error = '';
     try {
       const cats = await firstValueFrom(this.service.findAll());
-      this.categories.set(cats);
+      this.categories.set(cats.items);
     } catch {
       this.error = 'Error al cargar categorías';
     } finally {

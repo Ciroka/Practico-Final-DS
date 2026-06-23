@@ -2,12 +2,14 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { ProductsService } from '../../services/products.service';
-import { CategoriesService } from '../../services/categories.service';
-import { AuthService } from '../../services/auth.service';
+
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
-import { Product, CreateProductDto, UpdateProductDto } from '../../models/product';
-import { Category } from '../../models/category';
+import { CreateProductDto, UpdateProductDto } from '../../interfaces';
+import { CategoriesService, ProductsService, AuthService } from '../../services';
+import { Category } from '../../models/category.model';
+import { Product } from '../../models/product.model';
+import { SortEnum } from '../../types/sort.enum';
+import { OrderEnum } from '../../types/order.enum';
 
 @Component({
   selector: 'app-products',
@@ -34,8 +36,8 @@ export class ProductsPage implements OnInit {
   formCategoryId: number | null = null;
 
   filterName = '';
-  sortBy = 'id';
-  order = 'ASC';
+  sortBy: SortEnum = SortEnum.ID;
+  order: OrderEnum = OrderEnum.ASC;
   page = 1;
   limit = 10;
   total = 0;
@@ -44,7 +46,7 @@ export class ProductsPage implements OnInit {
     this.loadProducts();
     try {
       const cats = await firstValueFrom(this.categoriesService.findAll());
-      this.categories.set(cats);
+      this.categories.set(cats.items);
     } catch { }
   }
 
@@ -54,14 +56,15 @@ export class ProductsPage implements OnInit {
     try {
       const res = await firstValueFrom(this.productsService.findAll({
         name: this.filterName || undefined,
-        sortBy: this.sortBy as 'id' | 'name' | 'price' | 'stock',
-        order: this.order as 'ASC' | 'DESC',
+        sortBy: this.sortBy,
+        order: this.order,
         page: this.page,
         limit: this.limit,
       }));
       this.products.set(res.items);
       this.total = res.total;
-    } catch {
+    } catch (err) {
+      console.log(err);
       this.error = 'Error al cargar productos';
     } finally {
       this.loading.set(false);
@@ -127,6 +130,7 @@ export class ProductsPage implements OnInit {
           stock: this.formStock,
           categoryId: this.formCategoryId,
         };
+        console.log(this.formCategoryId);
         await firstValueFrom(this.productsService.update(this.editingProduct()!.id, dto));
       } else {
         const dto: CreateProductDto = {

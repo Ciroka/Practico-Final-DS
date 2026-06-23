@@ -1,20 +1,15 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {
-  CreateProductDto,
-  UpdateProductDto,
-  Product,
-  QueryProductsDto,
-  PaginatedProducts,
-} from '../interfaces/product';
+
 import { environment } from '../../environments/environment';
+import { Product } from '../models/product.model';
+import { CreateProductDto, PaginatedProducts, QueryProductsDto, UpdateProductDto } from '../interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
   private readonly api = `${environment.apiUrl}/products`;
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   findAll(query?: QueryProductsDto): Observable<PaginatedProducts> {
     let params = new HttpParams();

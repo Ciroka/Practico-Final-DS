@@ -1,58 +1,54 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CATEGORIES_REPOSITORY, CategoriesRepository } from '../repositories/categories.repository';
-import { Category } from '../category.types';
-import { ProductsService } from 'src/products/services/products.service';
-import { PaginatedResult } from 'src/shared/paginacion.type';
-import { CreateCategory } from '../dto/create-categories.dto';
-import { UpdateCategory } from '../dto/update-categories.dto';
-import { ProductEntity } from 'src/products/entities/ProductEntity';
-import { RequestCategoryDto } from '../dto/requestCategory.dto';
+
+import { CATEGORIES_REPOSITORY, ICategoriesRepository } from '../repositories/categories.repository.interface';
+import { QueryParamsCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto/request';
+import { QueryParamsProductDto } from '../../products/dto/request';
+import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { ProductsService } from '../../products/services/products.service';
+import { CategoryEntity } from '../entity/category.entity';
+import { ProductEntity } from '../../products/entities/product.entity';
 
 @Injectable()
 export class CategoriesService {
-
     constructor(
-    @Inject(CATEGORIES_REPOSITORY)
-    private readonly categoriesRepository: CategoriesRepository,
-    private readonly productsService: ProductsService,
-    ){}
+        @Inject(CATEGORIES_REPOSITORY)
+        private readonly categoriesRepository: ICategoriesRepository,
+        private readonly productsService: ProductsService,
+    ) {}
 
-    async findAll(input: RequestCategoryDto): Promise<PaginatedResult<Category>>{
-        const paginationResult = await this.categoriesRepository.findAll(input.page, input.limit, input.name, input.order);
-        return paginationResult
+    async findAll(params: QueryParamsCategoryDto): Promise<PaginatedResult<CategoryEntity>> {
+        return this.categoriesRepository.findAll(
+            params.page, params.limit, params.order, params.name
+        );
     }
 
-    async findOneById(id: number): Promise<Category>{
-        const category = await this.categoriesRepository.findById(id)
-        if(!category) throw new NotFoundException('Category not found.')
-        
-        return category
-    }
-
-    async findProducts(id: number): Promise<ProductEntity[]>{
-        await this.findOneById(id);
-        const products = await this.productsService.findAllByCategory(id);
-        return products;
-    }
-
-    async create (body: CreateCategory): Promise<Category>{
-        return await this.categoriesRepository.create(body);
-    }
-
-    async update ( id: number, input: UpdateCategory): Promise<Category> {
-        const category = await this.findOneById(id);
-
-        if (input.name !== undefined) category.name = input.name;
-
-        return await this.categoriesRepository.update(category);
-    }
-
-    async remove (id: number): Promise<Category> {
-        const category = await this.findOneById(id);
-        const products = await this.productsService.findAllByCategory(id);
-        if(products) throw new ConflictException('Cannot delete category with associated products.');
-        await this.categoriesRepository.remove(category);
+    async findOneById(id: number): Promise<CategoryEntity> {
+        const category = await this.categoriesRepository.findById(id);
+        if (!category) throw new NotFoundException('Category not found.');
         return category;
     }
 
+    async findProducts(id: number, params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
+        await this.findOneById(id);
+        return this.productsService.findAllByCategory(id, params);
+    }
+
+    async create(body: CreateCategoryDto): Promise<CategoryEntity> {
+        return this.categoriesRepository.create(body);
+    }
+
+    async update(id: number, input: UpdateCategoryDto): Promise<CategoryEntity> {
+        const category = await this.findOneById(id);
+        category.name = input.name;
+        return this.categoriesRepository.update(category);
+    }
+
+    async remove(id: number): Promise<CategoryEntity> {
+        const category = await this.findOneById(id);
+        const count = await this.productsService.countByCategory(id);
+
+        if (count > 0) throw new ConflictException('Cannot delete category with associated products.');
+        
+        return this.categoriesRepository.remove(category);
+    }
 }

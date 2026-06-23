@@ -20,6 +20,6 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ExternalUser> {
-    return this.usersService.findOneById(Number(id))
+    return this.usersService.findOneById(Number(id));
   }
 }

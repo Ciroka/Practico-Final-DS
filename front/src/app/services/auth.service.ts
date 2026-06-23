@@ -1,8 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { AuthResponse, LoginDto, RegisterDto } from '../interfaces/auth';
-import { SafeUser } from '../interfaces/user';
+import { AuthResponse, LoginDto, RegisterDto } from '../interfaces/auth.interface';
+import { SafeUser } from '../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 

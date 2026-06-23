@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { ProductsService } from '../../services/products.service';
-import { Product } from '../../models/product';
+
+import { ProductsService } from '../../services';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-detail',
