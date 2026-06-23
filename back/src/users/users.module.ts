@@ -7,6 +7,8 @@ import { USERS_GATEWAY } from './gateways/users.gateway';
 import { UsersService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
 import { UserEntity } from './entities/user.entity';
+import { USERS_REPOSITORY } from './repositories/users.repository.interface';
+import { UsersRepository } from './repositories/users.repository';
 
 @Global()
 @Module({
@@ -19,7 +21,11 @@ import { UserEntity } from './entities/user.entity';
       ? new LocalUsersGateway() 
       : new JsonPlaceholderUsersGateway()
     },
+    {
+      provide: USERS_REPOSITORY,
+      useClass: UsersRepository
+    }
   ],
-  exports: [UsersService, USERS_GATEWAY]
+  exports: [UsersService, USERS_GATEWAY, USERS_REPOSITORY]
 })
 export class UsersModule {}

@@ -2,10 +2,13 @@ export interface SafeUser {
   id: string;
   email: string;
   role: UserRole;
-  createdAt: string;
+  createdAt: Date;
 }
 
-export type UserRole = 'user' | 'admin';
+export enum UserRole {
+    ADMIN = "admin",
+    USER = "user"
+}
 
 export interface UpdateUserRoleDto {
   role: UserRole;

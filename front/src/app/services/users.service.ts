@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { SafeUser, UpdateUserRoleDto } from '../interfaces/user.interface';
+import { SafeUser, UpdateUserRoleDto } from '../interfaces';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +15,9 @@ export class UsersService {
   }
 
   updateRole(id: string, dto: UpdateUserRoleDto): Observable<SafeUser> {
+    console.log('update FRONT:')
+    console.log(JSON.stringify(dto));
+    console.log(dto.role);
     return this.http.patch<SafeUser>(`${this.api}/users/${id}/role`, dto);
   }
 }

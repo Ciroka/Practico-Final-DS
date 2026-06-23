@@ -19,6 +19,9 @@ export class AdminUsersPage implements OnInit {
   users = signal<SafeUser[]>([]);
   error = '';
 
+  rolAdmin = UserRole.ADMIN;
+  rolUser = UserRole.USER;
+
   async ngOnInit(): Promise<void> {
     try {
       const users = await firstValueFrom(this.usersService.findAll());
