@@ -2,9 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { UsersService } from '../../services/users.service';
-import { AuthService } from '../../services/auth.service';
-import { SafeUser, UserRole } from '../../interfaces/user';
+
+import { UsersService, AuthService } from '../../services';
+import { SafeUser, UserRole } from '../../interfaces';
 
 @Component({
   selector: 'app-admin-users',

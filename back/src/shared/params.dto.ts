@@ -1,7 +1,17 @@
+import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
 import { Type } from "class-transformer";
-import { IsIn, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
+
+import { OrderEnum } from "./order.enum";
 
 export class QueryParamsDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
+
+    @IsOptional()
+    @IsEnum(OrderEnum)
+    order: OrderEnum = OrderEnum.ASC;
+
     @IsOptional()
     @Type(() => Number)
     @IsInt()
@@ -12,14 +22,6 @@ export class QueryParamsDto {
     @Type(() => Number)
     @IsInt()
     @Min(1)
-    @Max(50)
+    @Max(100)
     limit: number = 10;
-
-    @IsOptional()
-    @IsIn(['asc', 'desc'])
-    order: 'asc' | 'desc' = 'asc';
-
-    @IsOptional()
-    @IsString()
-    name?: string;
 }

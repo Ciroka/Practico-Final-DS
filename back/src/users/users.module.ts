@@ -6,7 +6,7 @@ import { LocalUsersGateway } from './gateways/local-users.gateway';
 import { USERS_GATEWAY } from './gateways/users.gateway';
 import { UsersService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 
 @Global()
 @Module({

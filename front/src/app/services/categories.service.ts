@@ -2,9 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { CreateCategoryDto, UpdateCategoryDto } from '../interfaces/category.interface';
-import { QueryCategoriesDto, QueryProductsDto } from '../interfaces/query-params.interface';
-import { PaginatedCategories, PaginatedProducts } from '../interfaces/pagination.interface';
+import { CreateCategoryDto, UpdateCategoryDto, QueryCategoriesDto, QueryProductsDto, PaginatedCategories, PaginatedProducts } from '../interfaces';
 import { environment } from '../../environments/environment';
 import { Category } from '../models/category.model';
 

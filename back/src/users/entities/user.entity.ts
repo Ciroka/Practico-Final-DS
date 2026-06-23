@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { UserRole } from "../users/user-role.enum";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserRole } from "../user-role.enum";
 
 @Entity('users')
 export class UserEntity {
@@ -9,9 +9,12 @@ export class UserEntity {
     @Column({ unique: true })
     email!: string;
     
-    @Column({ select: false })
+    @Column({ select: false, name: 'password_hash' })
     passwordHash!: string;
     
     @Column({ type: 'text', default: UserRole.USER })
     role!: UserRole;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
 }

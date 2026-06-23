@@ -1,14 +1,12 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CATEGORIES_REPOSITORY, ICategoriesRepository } from '../repositories/categories.repository.interface';
+import { QueryParamsCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto/request';
+import { QueryParamsProductDto } from '../../products/dto/request';
+import { PaginatedResult } from '../../common/pagination/pagination.type';
 import { ProductsService } from '../../products/services/products.service';
-import { PaginatedResult } from '../../shared/paginacion.type';
-import { CreateCategoryDto } from '../dto/create-category.dto';
-import { UpdateCategoryDto } from '../dto/update-category.dto';
-import { ProductEntity } from '../../products/entities/product.entity';
-import { QueryParamsCategoryDto } from '../dto/params-categories.dto';
 import { CategoryEntity } from '../entity/category.entity';
-import { QueryParamsProductDto } from '../../products/dto/params-products.dto';
+import { ProductEntity } from '../../products/entities/product.entity';
 
 @Injectable()
 export class CategoriesService {

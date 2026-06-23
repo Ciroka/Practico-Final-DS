@@ -1,4 +1,4 @@
-import { SafeUser } from './user';
+import { SafeUser } from './user.interface';
 
 export interface RegisterDto {
   email: string;

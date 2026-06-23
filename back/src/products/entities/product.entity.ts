@@ -12,10 +12,13 @@ export class ProductEntity {
     @Column('decimal', { precision: 10, scale: 2 })
     price!: number;
     
-    @Column()
+    @Column({ type: 'int', default: 0 })
     stock!: number;
+
+    @Column({ name: 'category_id' })
+    categoryId: number;
     
-    @ManyToOne(() => CategoryEntity, category => category.products, { nullable: true, eager: true })
+    @ManyToOne(() => CategoryEntity, { onDelete: 'RESTRICT' })
     @JoinColumn({ name: 'category_id' })
     category!: CategoryEntity;
 }

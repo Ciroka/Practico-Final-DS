@@ -9,7 +9,7 @@ import { RolesGuard } from "../common/guards/roles.guards";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { AuthController } from "./controller/auth.controller";
 import { AuthService } from "./services/auth.service";
-import { UserEntity } from "../users/user.entity";
+import { UserEntity } from "../users/entities/user.entity";
 
 @Module({
     imports: [

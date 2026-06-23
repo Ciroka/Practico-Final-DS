@@ -2,9 +2,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 
+import { CreateProductDto } from "../dto/request";
+import { PaginatedResult } from "../../common/pagination/pagination.type";
+import { OrderEnum } from "../../shared/order.enum";
+import { SortEnum } from "../../shared/sort.enum";
 import { IProductsRepository } from "./products.repository.interface";
-import { PaginatedResult } from "../../shared/paginacion.type";
-import { CreateProductDto } from "../dto/create-product.dto";
 import { ProductEntity } from "../entities/product.entity";
 
 @Injectable()
@@ -14,20 +16,17 @@ export class ProductsRepository implements IProductsRepository {
         private readonly productsRepository: Repository<ProductEntity>,
     ) {}
 
-    async findAll(page: number, limit: number, order: 'asc' | 'desc', orderBy?: 'id' | 'name' | 'price' | 'stock', name?: string, categoryId?: number): Promise<PaginatedResult<ProductEntity>> {
-        const query = this.queryBuilder(categoryId, name, orderBy, order);
+    async findAll(page: number, limit: number, order: OrderEnum, sortBy?: SortEnum, name?: string, categoryId?: number): Promise<PaginatedResult<ProductEntity>> {
+        const query = this.queryBuilder(categoryId, name, sortBy, order);
         const offset = (page - 1) * limit;
 
         const [products, total] = await query.take(limit).skip(offset).getManyAndCount();
 
         const paginationResult: PaginatedResult<ProductEntity> = {
-            data: products,
-            meta: {
-                page,
-                limit,
-                total,
-                totalPages: Math.ceil(total / limit)
-            }
+            items: products,
+            total,
+            page,
+            limit,
         };
 
         return paginationResult;
@@ -56,19 +55,19 @@ export class ProductsRepository implements IProductsRepository {
         return this.queryBuilder(id).getCount();
     }
     
-    private queryBuilder(categoryId?: number, name?: string, orderBy?: 'id' | 'name' | 'price' | 'stock', order: 'asc' | 'desc' = 'asc') {
+    private queryBuilder(categoryId?: number, name?: string, sortBy?: SortEnum, order: OrderEnum = OrderEnum.ASC) {
         const query = this.productsRepository.createQueryBuilder('product');
 
         if (name) {
             query.where('product.name ILIKE :name', { name: `%${name}%` });
         }
 
-        if (orderBy) {
-            query.orderBy(`product.${orderBy}`, order === 'asc' ? 'ASC' : 'DESC');
+        if (sortBy) {
+            query.orderBy(`product.${sortBy}`, order);
         }
 
         if (categoryId) {
-            query.andWhere('product.category.id = :categoryId', { categoryId });
+            query.andWhere('product.categoryId = :categoryId', { categoryId });
         }
 
         return query;

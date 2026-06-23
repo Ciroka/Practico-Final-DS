@@ -1,6 +1,6 @@
 interface QueryDto {
   name?: string;
-  order?: 'asc' | 'desc';
+  order?: OrderEnum;
   page?: number;
   limit?: number;
 }
@@ -8,5 +8,5 @@ interface QueryDto {
 export interface QueryCategoriesDto extends QueryDto {}
 
 export interface QueryProductsDto extends QueryDto {
-  sortBy?: 'id' | 'name' | 'price' | 'stock';
+  sortBy?: SortEnum;
 }

@@ -1,12 +1,9 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
+import { CreateProductDto, QueryParamsProductDto, UpdateProductDto, UpdateStock } from '../dto/request';
 import { PRODUCTS_REPOSITORY, IProductsRepository } from '../repositories/products.repository.interface';
-import { UpdateStock } from '../dto/update-stock.dto';
-import { UpdateProductDto } from '../dto/update-product.dto';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { PaginatedResult } from '../../shared/paginacion.type';
+import { PaginatedResult } from '../../common/pagination/pagination.type';
 import { ProductEntity } from '../entities/product.entity';
-import { QueryParamsProductDto } from '../dto/params-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -16,13 +13,13 @@ export class ProductsService {
   ) {}
 
   async findAll(params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
-    const { page = 1, limit = 10, order, orderBy, name } = params;
-    return this.productsRepository.findAll(page, limit, order, orderBy, name);
+    const { page = 1, limit = 10, order, sortBy, name } = params;
+    return this.productsRepository.findAll(page, limit, order, sortBy, name);
   }
 
-  async findAllByCategory(categoryId: number, params: QueryParamsProductDto) {
-    const { page = 1, limit = 10, order, orderBy, name } = params;
-    return this.productsRepository.findAll(page, limit, order, orderBy, name, categoryId);
+  async findAllByCategory(categoryId: number, params: QueryParamsProductDto): Promise<PaginatedResult<ProductEntity>> {
+    const { page = 1, limit = 10, order, sortBy, name } = params;
+    return this.productsRepository.findAll(page, limit, order, sortBy, name, categoryId);
   }
 
   async findOne(id: number): Promise<ProductEntity> {
