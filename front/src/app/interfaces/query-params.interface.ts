@@ -1,3 +1,6 @@
+import { OrderEnum } from "../types/order.enum";
+import { SortEnum } from "../types/sort.enum";
+
 interface QueryDto {
   name?: string;
   order?: OrderEnum;
