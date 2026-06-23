@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "concurrently": "^10.0.3"
+  },
+  "scripts": {
+    "front": "npm run start --prefix front",
+    "preback": "docker compose -f back/docker-compose.yml up -d",
+    "back": "npm run start:dev --prefix back",
+    "start": "concurrently \"npm run front\" \"npm run back\"",
+    "stop": "docker compose -f back/docker-compose.yml down"
+  }
+}
+
