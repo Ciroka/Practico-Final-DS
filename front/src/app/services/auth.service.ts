@@ -10,7 +10,6 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private readonly api = `${environment.apiUrl}/auth`;
   private readonly tokenKey = 'access_token';
-
   user = signal<SafeUser | null>(null);
 
   constructor(
