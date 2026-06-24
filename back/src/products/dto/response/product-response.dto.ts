@@ -5,6 +5,6 @@ export interface ProductResponse {
     name: string;
     price: number;
     stock: number;
-    categoryId: number;
-    category: CategoryResponse;
+    categoryId?: number;
+    category?: CategoryResponse;
 };

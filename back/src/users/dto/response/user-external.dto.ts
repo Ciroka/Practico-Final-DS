@@ -1,4 +1,4 @@
-export type ExternalUser = {
+export interface UserExternal {
   id: number;
   name: string;
   username: string;

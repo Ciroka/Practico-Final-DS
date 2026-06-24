@@ -4,10 +4,8 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guards';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../user-role.enum';
-import { ExternalUser } from '../user.types';
+import { UserExternal, UserResponse, UpdateUserRoleDto } from '../dto';
 import { UsersService } from '../services/users.service';
-import { UserResponse } from '../types/user.type';
-import { UpdateUserRoleDto } from '../dto/update-user-role.dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,7 +14,7 @@ export class UsersController {
   @Get('externals')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  findAllExt(): Promise<ExternalUser[]> {
+  findAllExt(): Promise<UserExternal[]> {
     return this.usersService.findAllExt();
   }
   
@@ -28,7 +26,7 @@ export class UsersController {
   }
 
   @Get('externals/:id')
-  findOneExt(@Param('id') id: string): Promise<ExternalUser> {
+  findOneExt(@Param('id') id: string): Promise<UserExternal> {
     return this.usersService.findOneByIdExt(Number(id));
   }
 

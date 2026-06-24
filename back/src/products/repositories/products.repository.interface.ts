@@ -1,7 +1,7 @@
 import { OrderEnum } from '../../shared/order.enum';
 import { SortEnum } from '../../shared/sort.enum';
 import { PaginatedResult } from '../../common/pagination/pagination.type';
-import { CreateProductDto } from '../dto/request/create-product.dto';
+import { CreateProductDto } from '../dto';
 import { ProductEntity } from '../entities/product.entity';
 
 export const PRODUCTS_REPOSITORY = 'PRODUCTS_REPOSITORY';

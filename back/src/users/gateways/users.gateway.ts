@@ -1,8 +1,8 @@
-import { ExternalUser } from '../user.types';
+import { UserExternal } from '../dto/response/user-external.dto';
 
 export const USERS_GATEWAY = 'USERS_GATEWAY';
 
 export interface UsersGateway {
-  fetchAll(): Promise<ExternalUser[]>;
-  fetchById(id: number): Promise<ExternalUser>;
+  fetchAll(): Promise<UserExternal[]>;
+  fetchById(id: number): Promise<UserExternal>;
 }

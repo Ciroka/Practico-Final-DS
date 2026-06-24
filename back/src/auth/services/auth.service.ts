@@ -1,13 +1,12 @@
-import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
-import { ConflictException, Injectable, NotImplementedException, UnauthorizedException } from "@nestjs/common";
-import * as bcrypt from "bcrypt";
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ConflictException, Injectable, NotImplementedException, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
-import { Payload } from "../../shared/payload.type";
-import { UserRole } from "../../users/user-role.enum";
-import { UserLoginRequest, UserRegisterRequest } from "../dto/request";
-import { UserLoginResponse, UserMeResponse, UserRegisterResponse } from "../dto/response";
-import { UsersService } from "src/users/services/users.service";
+import { Payload } from '../../shared/payload.type';
+import { UserRole } from '../../users/user-role.enum';
+import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
+import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
 export class AuthService {
@@ -41,6 +40,7 @@ export class AuthService {
             sub: user.id,
             role: user.role
         };
+
         const access_token = this.jwtService.sign(payload);
 
         return {

@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-import { ExternalUser } from '../user.types';
+import { UserExternal } from '../dto';
 import { UsersGateway } from './users.gateway';
 
 export class JsonPlaceholderUsersGateway implements UsersGateway {
-  async fetchAll(): Promise<ExternalUser[]> {
-    const { data } = await axios.get<ExternalUser[]>(
+  async fetchAll(): Promise<UserExternal[]> {
+    const { data } = await axios.get<UserExternal[]>(
       'https://jsonplaceholder.typicode.com/users',
     );
     return data;
   }
 
-  async fetchById(id: number): Promise<ExternalUser> {
-    const { data } = await axios.get<ExternalUser>(
+  async fetchById(id: number): Promise<UserExternal> {
+    const { data } = await axios.get<UserExternal>(
       `https://jsonplaceholder.typicode.com/users/${id}`,
     );
     return data;

@@ -1,9 +1,7 @@
 import { Controller, Get, Param, Post, Body, Delete, Query, Put } from '@nestjs/common';
 
-import { CreateCategoryDto, QueryParamsCategoryDto, UpdateCategoryDto } from '../dto/request';
-import { QueryParamsProductDto } from '../../products/dto/request';
-import { ProductResponse } from '../../products/dto/response/product-response.dto';
-import { CategoryResponse } from '../dto/response/category-response.dto';
+import { CreateCategoryDto, QueryParamsCategoryDto, UpdateCategoryDto, CategoryResponse } from '../dto';
+import { ProductResponse, QueryParamsProductDto } from '../../products/dto';
 import { PaginatedResult } from '../../common/pagination/pagination.type';
 import { CategoriesService } from '../services/categories.service';
 

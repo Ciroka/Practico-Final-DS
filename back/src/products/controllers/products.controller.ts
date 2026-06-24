@@ -2,9 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuard
 
 import { JwtAuthGuard } from '../../common/guards';
 import { PaginatedResult } from '../../common/pagination/pagination.type';
-import { QueryParamsProductDto, CreateProductDto, UpdateProductDto, UpdateStock } from '../dto/request';
+import { QueryParamsProductDto, CreateProductDto, UpdateProductDto, UpdateStock, ProductResponse } from '../dto';
 import { ProductsService } from '../services/products.service';
-import { ProductResponse } from '../dto/response/product-response.dto';
 
 @Controller('products')
 export class ProductsController {

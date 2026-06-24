@@ -1,7 +1,7 @@
-import { DeepPartial, Repository } from "typeorm";
-import { UserEntity } from "../entities/user.entity";
-import { IUsersRepository } from "./users.repository.interface";
-import { InjectRepository } from "@nestjs/typeorm";
+import { DeepPartial, Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
+import { IUsersRepository } from './users.repository.interface';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export class UsersRepository implements IUsersRepository {
     constructor(

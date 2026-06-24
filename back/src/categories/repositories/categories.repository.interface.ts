@@ -1,7 +1,7 @@
-import { OrderEnum } from "../../shared/order.enum";
-import { PaginatedResult } from "../../common/pagination/pagination.type";
-import { CreateCategoryDto } from "../dto/request";
-import { CategoryEntity } from "../entity/category.entity";
+import { OrderEnum } from '../../shared/order.enum';
+import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { CreateCategoryDto } from '../dto';
+import { CategoryEntity } from '../entity/category.entity';
 
 export const CATEGORIES_REPOSITORY = 'CATEGORIES_REPOSITORY';
 

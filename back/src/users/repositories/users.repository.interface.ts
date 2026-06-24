@@ -1,5 +1,5 @@
-import { DeepPartial } from "typeorm";
-import { UserEntity } from "../entities/user.entity";
+import { DeepPartial } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
 
 export const USERS_REPOSITORY = 'USERS_REPOSITORY';
 

@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import { CreateProductDto, QueryParamsProductDto, UpdateProductDto, UpdateStock } from '../dto/request';
+import { CreateProductDto, QueryParamsProductDto, UpdateProductDto, UpdateStock } from '../dto';
 import { PRODUCTS_REPOSITORY, IProductsRepository } from '../repositories/products.repository.interface';
 import { PaginatedResult } from '../../common/pagination/pagination.type';
 import { ProductEntity } from '../entities/product.entity';

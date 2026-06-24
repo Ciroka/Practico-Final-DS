@@ -16,9 +16,9 @@ export class ProductEntity {
     stock!: number;
 
     @Column({ name: 'category_id' })
-    categoryId: number;
+    categoryId?: number;
     
     @ManyToOne(() => CategoryEntity, { onDelete: 'RESTRICT' })
     @JoinColumn({ name: 'category_id' })
-    category!: CategoryEntity;
+    category?: CategoryEntity;
 }

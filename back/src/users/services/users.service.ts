@@ -1,12 +1,10 @@
 import { DeepPartial } from 'typeorm';
 import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
 
-import { ExternalUser } from '../user.types';
-import { UserResponse } from '../types/user.type';
+import { UserResponse, UserExternal, UpdateUserRoleDto } from '../dto';
 import { USERS_GATEWAY, UsersGateway } from '../gateways/users.gateway';
 import { IUsersRepository, USERS_REPOSITORY } from '../repositories/users.repository.interface';
 import { UserEntity } from '../entities/user.entity';
-import { UpdateUserRoleDto } from '../dto/update-user-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +15,7 @@ export class UsersService {
     private readonly usersRepository: IUsersRepository
   ) {}
 
-  async findAllExt(): Promise<ExternalUser[]> {
+  async findAllExt(): Promise<UserExternal[]> {
     try {
       return await this.usersGateway.fetchAll();
     } catch {
@@ -25,7 +23,7 @@ export class UsersService {
     }
   }
 
-  async findOneByIdExt(id: number): Promise<ExternalUser> {
+  async findOneByIdExt(id: number): Promise<UserExternal> {
     try {
       return await this.usersGateway.fetchById(id);
     } catch {
