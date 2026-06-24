@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../common/guards';
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
@@ -12,8 +12,8 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get('me')
-    async me(): Promise<UserMeResponse> {
-        return this.authService.me();
+    async me(@Request() req: any): Promise<UserMeResponse> {
+        return this.authService.me(req.user.sub);
     }
 
     @Post("register")

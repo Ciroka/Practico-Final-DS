@@ -1,5 +1,5 @@
 import { DeepPartial } from 'typeorm';
-import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { UserResponse, UserExternal, UpdateUserRoleDto } from '../dto';
 import { USERS_GATEWAY, UsersGateway } from '../gateways/users.gateway';

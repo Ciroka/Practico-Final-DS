@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ConflictException, Injectable, NotImplementedException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { Payload } from '../../shared/payload.type';
@@ -82,7 +82,17 @@ export class AuthService {
         };
     }
 
-    async me(): Promise<UserMeResponse> {
-        throw new NotImplementedException();
+    async me(userId: string): Promise<UserMeResponse> {
+        try {
+            const user = await this.usersService.findOne(userId);
+            return {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                createdAt: user.createdAt
+            };
+        } catch {
+            throw new UnauthorizedException("Bro me");
+        }
     }
 }
