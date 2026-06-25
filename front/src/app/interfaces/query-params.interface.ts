@@ -1,15 +1,9 @@
-import { OrderEnum } from "../types/order.enum";
-import { SortEnum } from "../types/sort.enum";
+import { OrderEnum, SortEnum } from "../types";
 
-interface QueryDto {
+export interface QueryProductsDto {
   name?: string;
   order?: OrderEnum;
+  sortBy?: SortEnum;
   page?: number;
   limit?: number;
-}
-
-export interface QueryCategoriesDto extends QueryDto {}
-
-export interface QueryProductsDto extends QueryDto {
-  sortBy?: SortEnum;
 }

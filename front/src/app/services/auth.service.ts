@@ -20,19 +20,12 @@ export class AuthService {
     console.log('token:', token);
     console.log('token length:', token?.length);
     if (token) {
-      this.me()/*.pipe(
-        catchError(() => {
-          this.logout(); 
-          return of(null);
-        })
-      )*/.subscribe();
+      this.me().subscribe();
     }
   }
 
   register(dto: RegisterDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.api}/register`, dto).pipe(
-      tap((res) => this.handleAuth(res)),
-    );
+    return this.http.post<AuthResponse>(`${this.api}/register`, dto);
   }
 
   login(dto: LoginDto): Observable<AuthResponse> {
@@ -82,7 +75,6 @@ export class AuthService {
   }
 
   private handleAuth(res: AuthResponse): void {
-     console.log('guardando token:', res.access_token);
     localStorage.setItem(this.tokenKey, res.access_token);
     this.user.set(res.user);
   }

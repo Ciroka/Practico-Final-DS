@@ -1,4 +1,4 @@
-import { UserExternal } from '../dto/response/user-external.dto';
+import { UserExternal } from '../dto';
 
 export const USERS_GATEWAY = 'USERS_GATEWAY';
 

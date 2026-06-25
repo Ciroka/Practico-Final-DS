@@ -3,6 +3,7 @@ export interface SafeUser {
   email: string;
   role: UserRole;
   createdAt: Date;
+  isVerified: boolean;
 }
 
 export type UserRole = 'admin' | 'user';

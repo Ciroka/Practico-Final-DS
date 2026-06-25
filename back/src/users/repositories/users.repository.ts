@@ -1,7 +1,8 @@
 import { DeepPartial, Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
-import { IUsersRepository } from './users.repository.interface';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { IUsersRepository } from './users.repository.interface';
+import { UserEntity } from '../entities/user.entity';
 
 export class UsersRepository implements IUsersRepository {
     constructor(
@@ -23,9 +24,9 @@ export class UsersRepository implements IUsersRepository {
 
     async findOneByEmailWithPassword(email: string): Promise<UserEntity | null> {
         return this.usersRepo.createQueryBuilder('u')
-                                    .addSelect('u.passwordHash')
-                                    .where('u.email = :email', { email })
-                                    .getOne();
+                            .addSelect('u.passwordHash')
+                            .where('u.email = :email', { email })
+                            .getOne();
     }
 
     async findOneByVerificationToken(verificationToken: string){

@@ -4,21 +4,24 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailSenderService {
-    
-    from!: string;
-    
-    transporter!: nodemailer.Transporter;
+    private from!: string;
+    private transporter!: nodemailer.Transporter;
 
     constructor(
-        configService: ConfigService,
-    ){
+        configService: ConfigService
+    ) {
         this.from = configService.get('SMTP_FROM')!;
         this.transporter = nodemailer.createTransport({
             port: Number(configService.get('SMTP_PORT')!),
             host: configService.get('SMTP_HOST')!,
-            auth: {user: configService.get('SMTP_USER')!, pass: configService.get("SMTP_PASS")!},
-            tls: {rejectUnauthorized: false},
-            secure: false,
+            auth: {
+                user: configService.get('SMTP_USER')!,
+                pass: configService.get("SMTP_PASS")!
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            secure: false
         });
     }
 
@@ -31,7 +34,7 @@ export class EmailSenderService {
         })
     } 
 
-    async sendEmailVerification(token: string, to: string): Promise<void>{
+    async sendEmailVerification(token: string, to: string): Promise<void> {
         const subject = 'Email Verification';
         const html = `<p>Please verify your email.</p> <a href="http://localhost:4200/verify-email?token=${token}">Verify your email</a>`;
         await this.sendEmail(to, subject, html);
@@ -42,5 +45,4 @@ export class EmailSenderService {
         const html = `<p>Email password reset.</p> <a href="http://localhost:4200/verify-email?token=${token}">Reset your password</a>`;
         await this.sendEmail(to, subject, html);
     }
-
 }
