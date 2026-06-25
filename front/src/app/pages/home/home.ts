@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
         firstValueFrom(this.categoriesService.findAll()),
       ]);
       this.productCount.set(res.total);
-      this.categoryCount.set(cats.total);
+      this.categoryCount.set(cats.length);
     } catch {
     } finally {
       this.loading.set(false);
