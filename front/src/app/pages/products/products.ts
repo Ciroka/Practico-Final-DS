@@ -46,7 +46,7 @@ export class ProductsPage implements OnInit {
     this.loadProducts();
     try {
       const cats = await firstValueFrom(this.categoriesService.findAll());
-      this.categories.set(cats.items);
+      this.categories.set(cats);
     } catch { }
   }
 

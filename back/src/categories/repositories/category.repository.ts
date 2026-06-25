@@ -2,11 +2,9 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CreateCategoryDto } from '../dto';
 import { ICategoriesRepository } from './categories.repository.interface';
 import { CategoryEntity } from '../entity/category.entity';
-import { OrderEnum } from '../../shared/order.enum';
 
 @Injectable()
 export class CategoryRepository implements ICategoriesRepository {
@@ -15,19 +13,8 @@ export class CategoryRepository implements ICategoriesRepository {
         private readonly categoriesRepository: Repository<CategoryEntity>,
     ) {}
 
-    async findAll(page: number, limit: number, order: OrderEnum, name?: string): Promise<PaginatedResult<CategoryEntity>> {
-        const offset = (page - 1) * limit;
-        const query = this.queryBuilder(order, name);
-
-        const [categories, total] = await query.skip(offset).take(limit).getManyAndCount();
-        const paginationResult: PaginatedResult<CategoryEntity> = {
-            items: categories,
-            total,
-            page,
-            limit
-        };
-
-        return paginationResult;
+    async findAll(): Promise<CategoryEntity[]> {
+        return this.categoriesRepository.find();
     }
 
     async findById(id: number): Promise<CategoryEntity | undefined> {
@@ -47,16 +34,5 @@ export class CategoryRepository implements ICategoriesRepository {
 
     async remove(category: CategoryEntity): Promise<CategoryEntity> {
         return this.categoriesRepository.remove(category);
-    }
-    
-    private queryBuilder(order: OrderEnum, name?: string) {
-        const query = this.categoriesRepository.createQueryBuilder('category');
-
-        if (name) {
-            query.where('category.name ILIKE :name', { name: `%${name}%` });
-        }
-        
-        query.orderBy('category.name', order);
-        return query;
     }
 }

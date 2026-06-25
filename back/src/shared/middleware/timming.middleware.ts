@@ -1,4 +1,4 @@
-import {Inject, Injectable, NestMiddleware} from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
 
 @Injectable()

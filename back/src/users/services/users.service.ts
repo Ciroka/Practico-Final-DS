@@ -49,7 +49,7 @@ export class UsersService {
     return this.usersRepository.findOneByEmailWithPassword(email.trim().toLowerCase())
   }
 
-  async findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null>{
+  async findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneByVerificationToken(verificationToken);
   } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
 
@@ -71,14 +71,13 @@ export class UsersService {
     return this.usersRepository.update(user);
   }
 
-  async verifyEmail(user: UserEntity): Promise<void>{
+  async verifyEmail(user: UserEntity): Promise<void> {
     user.isVerified = true;
     user.verificationToken = null;
     await this.update(user);
   }
   
-  async update (user: DeepPartial<UserEntity>): Promise<void>{
+  async update (user: DeepPartial<UserEntity>): Promise<void> {
     await this.usersRepository.update(user);
   }
-
 }

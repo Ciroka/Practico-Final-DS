@@ -33,7 +33,7 @@ export class CategoriesPage implements OnInit {
     this.error = '';
     try {
       const cats = await firstValueFrom(this.service.findAll());
-      this.categories.set(cats.items);
+      this.categories.set(cats);
     } catch {
       this.error = 'Error al cargar categorías';
     } finally {
