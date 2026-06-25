@@ -25,7 +25,9 @@ export class AuthService {
   }
 
   register(dto: RegisterDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.api}/register`, dto);
+    return this.http.post<AuthResponse>(`${this.api}/register`, dto)/*.pipe(
+      tap((res) => this.handleAuth(res))
+    );*/
   }
 
   login(dto: LoginDto): Observable<AuthResponse> {
