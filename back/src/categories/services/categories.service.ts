@@ -1,7 +1,7 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CATEGORIES_REPOSITORY, ICategoriesRepository } from '../repositories/categories.repository.interface';
-import { QueryParamsCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto';
 import { QueryParamsProductDto } from '../../products/dto';
 import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { ProductsService } from '../../products/services/products.service';
@@ -16,10 +16,8 @@ export class CategoriesService {
         private readonly productsService: ProductsService,
     ) {}
 
-    async findAll(params: QueryParamsCategoryDto): Promise<PaginatedResult<CategoryEntity>> {
-        return this.categoriesRepository.findAll(
-            params.page, params.limit, params.order, params.name
-        );
+    async findAll(): Promise<CategoryEntity[]> {
+        return this.categoriesRepository.findAll();
     }
 
     async findOneById(id: number): Promise<CategoryEntity> {

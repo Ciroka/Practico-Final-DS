@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
-import { Payload } from '../../shared/payload.type';
+import { Payload } from '../types/payload.type';
 import { UserRole } from '../../users/user-role.enum';
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
 import { UsersService } from 'src/users/services/users.service';

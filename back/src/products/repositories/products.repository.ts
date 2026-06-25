@@ -4,8 +4,8 @@ import { Repository } from "typeorm";
 
 import { CreateProductDto } from "../dto";
 import { PaginatedResult } from "../../shared/pagination/pagination.type";
-import { OrderEnum } from "../../shared/order.enum";
-import { SortEnum } from "../../shared/sort.enum";
+import { OrderEnum } from "../../shared/enums/order.enum";
+import { SortEnum } from "../../shared/enums/sort.enum";
 import { IProductsRepository } from "./products.repository.interface";
 import { ProductEntity } from "../entities/product.entity";
 

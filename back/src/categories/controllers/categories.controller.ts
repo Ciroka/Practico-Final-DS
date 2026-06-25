@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body, Delete, Query, Put } from '@nestjs/common';
 
-import { CreateCategoryDto, QueryParamsCategoryDto, UpdateCategoryDto, CategoryResponse } from '../dto';
+import { CreateCategoryDto, UpdateCategoryDto, CategoryResponse } from '../dto';
 import { ProductResponse, QueryParamsProductDto } from '../../products/dto';
 import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CategoriesService } from '../services/categories.service';
@@ -10,8 +10,8 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
 
     @Get()
-    async findAll(@Query() params: QueryParamsCategoryDto): Promise<PaginatedResult<CategoryResponse>> {
-        return this.categoriesService.findAll(params);
+    async findAll(): Promise<CategoryResponse[]> {
+        return this.categoriesService.findAll();
     }
 
     @Get(':id')

@@ -29,13 +29,13 @@ export class AuthController {
     }
 
     @Post('verify-email')
-    async verifyEmail (@Body() verificationToken: UserVerifyEmailDto): Promise<UserMessageResponse>{
+    async verifyEmail(@Body() verificationToken: UserVerifyEmailDto): Promise<UserMessageResponse> {
         return this.authService.verifyEmail(verificationToken.token);
     }
 
     @Post('resend-verification')
     //Preguntar si esta metodo devuelve algo o algun message
-    async resendVerification(@Request() req: any): Promise<void>{
-        return await this.authService.resendVerificationEmail(req.user.sub);
+    async resendVerification(@Request() req: any): Promise<void> {
+        return this.authService.resendVerificationEmail(req.user.sub);
     }
 }

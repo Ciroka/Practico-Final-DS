@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProductDto, QueryParamsProductDto, UpdateProductDto, UpdateStock } from '../dto';
 import { PRODUCTS_REPOSITORY, IProductsRepository } from '../repositories/products.repository.interface';
