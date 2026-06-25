@@ -5,16 +5,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { RolesGuard } from '../common/guards/roles.guards';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../shared/guards/roles.guards';
+import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { AuthController } from './controller/auth.controller';
 import { AuthService } from './services/auth.service';
 import { UserEntity } from '../users/entities/user.entity';
+import { EmailSenderModule } from 'src/email-sender/email-sender.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserEntity]),
         ConfigModule,
+        EmailSenderModule,
+        TypeOrmModule.forFeature([UserEntity]),
         PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.registerAsync({
             imports: [ConfigModule],

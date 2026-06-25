@@ -28,6 +28,10 @@ export class UsersRepository implements IUsersRepository {
                                     .getOne();
     }
 
+    async findOneByVerificationToken(verificationToken: string){
+        return this.usersRepo.findOneBy({verificationToken});
+    }
+
     async count(): Promise<number> {
         return this.usersRepo.count();
     }

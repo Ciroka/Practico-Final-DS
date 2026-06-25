@@ -1,19 +1,22 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { Payload } from '../../shared/payload.type';
 import { UserRole } from '../../users/user-role.enum';
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
 import { UsersService } from 'src/users/services/users.service';
+import { EmailSenderService } from 'src/email-sender/services/email-sender.service';
+import { UserMessageResponse } from '../dto/response/user-message-response.dto';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly configService: ConfigService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly emailSenderService: EmailSenderService
     ) {}
 
     async register(userRegister: UserRegisterRequest): Promise<UserRegisterResponse> {
@@ -25,17 +28,16 @@ export class AuthService {
         const countUsers = await this.usersService.count();
 
         const role = countUsers === 0 ? UserRole.ADMIN : UserRole.USER;
-        // const verificationToken = crypto.randomUUID();
+        const verificationToken = crypto.randomUUID();
 
         const user = await this.usersService.register({
             email: userRegister.email.trim().toLowerCase(),
             passwordHash,
             role,
-            // verificationToken
+            verificationToken
         });
-        // await this.emailService.sendVerificationEmail(user.email, verificationToken);
-        // o algo así para el email.
-
+        await this.emailSenderService.sendEmailVerification(verificationToken, user.email);
+        
         const payload: Payload = {
             sub: user.id,
             role: user.role
@@ -84,15 +86,32 @@ export class AuthService {
 
     async me(userId: string): Promise<UserMeResponse> {
         try {
-            const user = await this.usersService.findOne(userId);
+            console.log(userId);
+            const user = await this.usersService.findOneById(userId);
             return {
                 id: user.id,
                 email: user.email,
                 role: user.role,
-                createdAt: user.createdAt
+                createdAt: user.createdAt,
+                isVerified: user.isVerified
             };
         } catch {
             throw new UnauthorizedException("Bro me");
         }
+    }
+
+    async verifyEmail(verificationToken: string):Promise<UserMessageResponse> {
+        const user = await this.usersService.findOneByVerificationToken(verificationToken);
+        if(!user) throw new BadRequestException("Token inválido o expirado");
+        await this.usersService.verifyEmail(user);
+        return {message: "Email verificado correctamente"};
+    }
+
+    async resendVerificationEmail(id: string){
+        const user = await this.usersService.findOneById(id);
+        const token = crypto.randomUUID();
+        user.verificationToken = token;
+        await this.usersService.update(user);
+        await this.emailSenderService.sendEmailVerification(token, user.email);
     }
 }

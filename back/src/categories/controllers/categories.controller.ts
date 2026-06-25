@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post, Body, Delete, Query, Put } from '@nestjs/
 
 import { CreateCategoryDto, QueryParamsCategoryDto, UpdateCategoryDto, CategoryResponse } from '../dto';
 import { ProductResponse, QueryParamsProductDto } from '../../products/dto';
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CategoriesService } from '../services/categories.service';
 
 @Controller('categories')

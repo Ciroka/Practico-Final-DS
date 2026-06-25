@@ -17,4 +17,10 @@ export class UserEntity {
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
+
+    @Column({default: false, name: "is_verified"})
+    isVerified!: boolean;
+
+    @Column({nullable: true, name: "verification_token", type: "varchar"})
+    verificationToken!: string | null;
 }

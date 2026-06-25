@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 
-import { JwtAuthGuard } from '../../common/guards';
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { JwtAuthGuard } from '../../shared/guards';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { QueryParamsProductDto, CreateProductDto, UpdateProductDto, UpdateStock, ProductResponse } from '../dto';
 import { ProductsService } from '../services/products.service';
 

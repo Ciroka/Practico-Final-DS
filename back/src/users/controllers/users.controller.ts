@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guards';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
+import { RolesGuard } from '../../shared/guards/roles.guards';
+import { Roles } from '../../shared/decorators/roles.decorator';
 import { UserRole } from '../user-role.enum';
 import { UserExternal, UserResponse, UpdateUserRoleDto } from '../dto';
 import { UsersService } from '../services/users.service';

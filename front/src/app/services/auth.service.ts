@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { AuthResponse, LoginDto, RegisterDto } from '../interfaces/auth.interface';
+import { catchError, Observable, of, tap } from 'rxjs';
+import { AuthMessageResponse, AuthResponse, LoginDto, RegisterDto } from '../interfaces/auth.interface';
 import { SafeUser } from '../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -17,8 +17,15 @@ export class AuthService {
     private router: Router,
   ) {
     const token = this.getToken();
+    console.log('token:', token);
+    console.log('token length:', token?.length);
     if (token) {
-      this.me().subscribe();
+      this.me()/*.pipe(
+        catchError(() => {
+          this.logout(); 
+          return of(null);
+        })
+      )*/.subscribe();
     }
   }
 
@@ -58,7 +65,24 @@ export class AuthService {
     return this.user()?.role === 'admin';
   }
 
+  verifyEmail(token: string): Observable<{ message: string }> {
+    return this.http.post<AuthMessageResponse>(`${this.api}/verify-email`, { token });
+  }
+
+  resendVerification(): Observable<void> {
+    return this.http.post<void>(`${this.api}/resend-verification`, {});
+  }
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<AuthMessageResponse>(`${this.api}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<AuthMessageResponse>(`${this.api}/reset-password`, { token, password });
+  }
+
   private handleAuth(res: AuthResponse): void {
+     console.log('guardando token:', res.access_token);
     localStorage.setItem(this.tokenKey, res.access_token);
     this.user.set(res.user);
   }

@@ -35,7 +35,7 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  async findOne(id: string): Promise<UserEntity> {
+  async findOneById(id: string): Promise<UserEntity> {
     const user = await this.usersRepository.findOneById(id);
     if (!user) throw new NotFoundException('User not found.');
     return user;
@@ -48,6 +48,10 @@ export class UsersService {
   async findOneByEmailWithPassword(email: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneByEmailWithPassword(email.trim().toLowerCase())
   }
+
+  async findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null>{
+    return this.usersRepository.findOneByVerificationToken(verificationToken);
+  } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
 
   async count(): Promise<number> {
     return this.usersRepository.count();
@@ -62,8 +66,19 @@ export class UsersService {
   }
 
   async updateRole(id: string, dto: UpdateUserRoleDto): Promise<UserEntity> {
-    const user = await this.findOne(id);
+    const user = await this.findOneById(id);
     user.role = dto.role;
     return this.usersRepository.update(user);
   }
+
+  async verifyEmail(user: UserEntity): Promise<void>{
+    user.isVerified = true;
+    user.verificationToken = null;
+    await this.update(user);
+  }
+  
+  async update (user: DeepPartial<UserEntity>): Promise<void>{
+    await this.usersRepository.update(user);
+  }
+
 }

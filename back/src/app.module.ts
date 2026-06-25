@@ -2,8 +2,8 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { TimmingMiddleware } from './common/middleware/timming.middleware';
+import { LoggerMiddleware } from './shared/middleware/logger.middleware';
+import { TimmingMiddleware } from './shared/middleware/timming.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
@@ -11,6 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { UserEntity } from './users/entities/user.entity';
 import { ProductEntity } from './products/entities/product.entity';
 import { CategoryEntity } from './categories/entity/category.entity';
+import { EmailSenderModule } from './email-sender/email-sender.module';
 
 @Module({
   imports: [
@@ -37,7 +38,9 @@ import { CategoryEntity } from './categories/entity/category.entity';
         entities: [CategoryEntity, ProductEntity, UserEntity],
         synchronize: true
       })
-    })
+    }),
+
+    EmailSenderModule
   ]
 })
 

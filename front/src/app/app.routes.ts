@@ -45,4 +45,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPasswordPage),
     canActivate: []
   },
+  {
+    path:'verify-pending',
+    loadComponent: () => import('./pages/verify-pending/verify-pending').then((m) => m.VerifyPending),
+    canActivate: []
+  },
+  {
+    path:'verify-email',
+    loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+    canActivate: [],
+  },
 ];

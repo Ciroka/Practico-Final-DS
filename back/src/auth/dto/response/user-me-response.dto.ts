@@ -5,4 +5,5 @@ export interface UserMeResponse {
     email: string;
     role: UserRole;
     createdAt: Date;
+    isVerified: boolean;
 }

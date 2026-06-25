@@ -14,3 +14,7 @@ export interface AuthResponse {
   user: SafeUser;
   access_token: string;
 }
+
+export interface AuthMessageResponse {
+  message: string;
+}

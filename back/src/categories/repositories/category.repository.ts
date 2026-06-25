@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CreateCategoryDto } from '../dto';
 import { ICategoriesRepository } from './categories.repository.interface';
 import { CategoryEntity } from '../entity/category.entity';

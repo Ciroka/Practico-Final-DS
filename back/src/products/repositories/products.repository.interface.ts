@@ -1,6 +1,6 @@
 import { OrderEnum } from '../../shared/order.enum';
 import { SortEnum } from '../../shared/sort.enum';
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CreateProductDto } from '../dto';
 import { ProductEntity } from '../entities/product.entity';
 

@@ -1,5 +1,5 @@
 import { OrderEnum } from '../../shared/order.enum';
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { CreateCategoryDto } from '../dto';
 import { CategoryEntity } from '../entity/category.entity';
 

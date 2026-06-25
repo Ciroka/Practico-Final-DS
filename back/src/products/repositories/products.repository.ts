@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 
 import { CreateProductDto } from "../dto";
-import { PaginatedResult } from "../../common/pagination/pagination.type";
+import { PaginatedResult } from "../../shared/pagination/pagination.type";
 import { OrderEnum } from "../../shared/order.enum";
 import { SortEnum } from "../../shared/sort.enum";
 import { IProductsRepository } from "./products.repository.interface";

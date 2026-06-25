@@ -3,7 +3,7 @@ import { ConflictException, Inject, Injectable, NotFoundException } from '@nestj
 import { CATEGORIES_REPOSITORY, ICategoriesRepository } from '../repositories/categories.repository.interface';
 import { QueryParamsCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto';
 import { QueryParamsProductDto } from '../../products/dto';
-import { PaginatedResult } from '../../common/pagination/pagination.type';
+import { PaginatedResult } from '../../shared/pagination/pagination.type';
 import { ProductsService } from '../../products/services/products.service';
 import { CategoryEntity } from '../entity/category.entity';
 import { ProductEntity } from '../../products/entities/product.entity';
