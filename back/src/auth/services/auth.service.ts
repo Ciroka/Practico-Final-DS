@@ -77,7 +77,8 @@ export class AuthService {
                 id: user.id,
                 email: user.email,
                 role: user.role,
-                createdAt: user.createdAt
+                createdAt: user.createdAt,
+                isVerified: user.isVerified
             },
             access_token
         };

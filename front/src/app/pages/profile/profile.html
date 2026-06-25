@@ -2,7 +2,7 @@
   <div class="col-md-6 col-lg-5">
     <div class="card shadow-sm">
       <div class="card-body p-4">
-        @if (auth.user(); as user) {
+        @if (user()) {
           <div class="text-center mb-4">
             <i class="bi bi-person-circle display-4" style="color: var(--primary)"></i>
             <h3 class="mt-2 fw-bold">Mi perfil</h3>
@@ -16,18 +16,18 @@
               </tr>-->
               <tr>
                 <th class="ps-0">Email</th>
-                <td><i class="bi bi-envelope me-1 text-muted"></i>{{ user.email }}</td>
+                <td><i class="bi bi-envelope me-1 text-muted"></i>{{ user()!.email }}</td>
               </tr>
               <tr>
-                <th class="ps-0">Estado</th>
+                <th class="ps-0">Estado email</th>
                 <td>
-                  @if (user.isVerified) {
-                    <span class="badge bg-warning text-dark">
-                      <i class="bi bi-patch-check-fill"></i> Verificado
+                  @if (user()!.isVerified) {
+                    <span class="badge bg-success text-white">
+                      <i class="bi bi-patch-check"></i> Verificado
                     </span>
                   } @else {
-                    <span class="badge bg-info">
-                      <i class="bi bi-patch-exclamation-fill"></i> No verificado
+                    <span class="badge bg-danger text-white">
+                      <i class="bi bi-patch-exclamation"></i> No verificado
                     </span>
                   }
                   
@@ -36,12 +36,12 @@
               <tr>
                 <th class="ps-0">Rol</th>
                 <td>
-                  @if (user.role === 'admin') {
-                    <span class="badge bg-warning text-dark">
+                  @if (user()!.role === 'admin') {
+                    <span class="badge bg-primary text-white">
                       <i class="bi bi-shield-check me-1"></i>Administrador
                     </span>
                   } @else {
-                    <span class="badge bg-info">
+                    <span class="badge bg-secondary text-white">
                       <i class="bi bi-person me-1"></i>Usuario
                     </span>
                   }
@@ -50,7 +50,7 @@
               </tr>
               <tr>
                 <th class="ps-0">Registrado</th>
-                <td><i class="bi bi-calendar me-1 text-muted"></i>{{ user.createdAt | date:'medium' }}</td>
+                <td><i class="bi bi-calendar me-1 text-muted"></i>{{ user()!.createdAt | date:'medium' }}</td>
               </tr>
             </tbody>
           </table>

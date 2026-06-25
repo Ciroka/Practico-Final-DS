@@ -78,4 +78,8 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, res.access_token);
     this.user.set(res.user);
   }
+
+  getUser(){
+    return this.user;
+  }
 }

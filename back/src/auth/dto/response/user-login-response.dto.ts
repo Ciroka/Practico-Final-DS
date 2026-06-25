@@ -6,6 +6,7 @@ export interface UserLoginResponse {
         email: string;
         role: UserRole;
         createdAt: Date;
+        isVerified: Boolean,
     };
     access_token: string;
 }

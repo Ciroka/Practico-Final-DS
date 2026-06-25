@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
-export class ProfilePage {
+export class ProfilePage{
   auth = inject(AuthService);
+  user = this.auth.getUser();
 }

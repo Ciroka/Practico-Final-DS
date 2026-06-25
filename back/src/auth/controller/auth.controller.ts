@@ -32,6 +32,7 @@ export class AuthController {
     }
 
     @Post('resend-verification')
+    @UseGuards(JwtAuthGuard)
     //Preguntar si esta metodo devuelve algo o algun message
     async resendVerification(@Request() req: any): Promise<void> {
         return this.authService.resendVerificationEmail(req.user.sub);
