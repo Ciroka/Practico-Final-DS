@@ -4,11 +4,10 @@ import { BadRequestException, ConflictException, Injectable, UnauthorizedExcepti
 import * as bcrypt from 'bcrypt';
 
 import { Payload } from '../types/payload.type';
-import { UserRole } from '../../users/user-role.enum';
-import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
-import { UsersService } from 'src/users/services/users.service';
-import { EmailSenderService } from 'src/email-sender/services/email-sender.service';
-import { UserMessageResponse } from '../dto/response/user-message-response.dto';
+import { UserRole } from '../../shared/enums';
+import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse, UserMessageResponse } from '../dto';
+import { UsersService } from '../../users/services/users.service';
+import { EmailSenderService } from '../../email-sender/services/email-sender.service';
 
 @Injectable()
 export class AuthService {
@@ -103,14 +102,17 @@ export class AuthService {
     async verifyEmail(verificationToken: string):Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByVerificationToken(verificationToken);
         if(!user) throw new BadRequestException("Token inválido o expirado");
+
         await this.usersService.verifyEmail(user);
-        return {message: "Email verificado correctamente"};
+        return { message: "Email verificado correctamente" };
     }
 
-    async resendVerificationEmail(id: string){
+    async resendVerificationEmail(id: string) {
         const user = await this.usersService.findOneById(id);
+
         const token = crypto.randomUUID();
         user.verificationToken = token;
+        
         await this.usersService.update(user);
         await this.emailSenderService.sendEmailVerification(token, user.email);
     }

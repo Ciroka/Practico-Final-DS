@@ -1,10 +1,8 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../shared/guards';
-import { UserLoginRequest, UserRegisterRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse } from '../dto';
+import { UserLoginRequest, UserRegisterRequest, UserVerifyEmailRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse, UserMessageResponse } from '../dto';
 import { AuthService } from '../services/auth.service';
-import { UserVerifyEmailDto } from '../dto/request/user-verify-email-request.dto';
-import { UserMessageResponse } from '../dto/response/user-message-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +27,7 @@ export class AuthController {
     }
 
     @Post('verify-email')
-    async verifyEmail(@Body() verificationToken: UserVerifyEmailDto): Promise<UserMessageResponse> {
+    async verifyEmail(@Body() verificationToken: UserVerifyEmailRequest): Promise<UserMessageResponse> {
         return this.authService.verifyEmail(verificationToken.token);
     }
 

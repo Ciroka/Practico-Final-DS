@@ -1,8 +1,7 @@
 import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
-
-import { SortEnum } from "../../../shared/enums/sort.enum";
-import { OrderEnum } from "../../../shared/enums/order.enum";
 import { Type } from "class-transformer";
+
+import { SortEnum, OrderEnum } from "../../../shared/enums";
 
 export class QueryParamsProductDto {
     @IsOptional()

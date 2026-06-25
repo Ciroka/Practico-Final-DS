@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { AuthController } from './controller/auth.controller';
 import { AuthService } from './services/auth.service';
 import { UserEntity } from '../users/entities/user.entity';
-import { EmailSenderModule } from 'src/email-sender/email-sender.module';
+import { EmailSenderModule } from '../email-sender/email-sender.module';
 
 @Module({
     imports: [

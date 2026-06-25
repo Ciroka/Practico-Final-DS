@@ -8,10 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { EmailSenderModule } from './email-sender/email-sender.module';
 import { UserEntity } from './users/entities/user.entity';
 import { ProductEntity } from './products/entities/product.entity';
 import { CategoryEntity } from './categories/entity/category.entity';
-import { EmailSenderModule } from './email-sender/email-sender.module';
 
 @Module({
   imports: [
@@ -19,6 +19,7 @@ import { EmailSenderModule } from './email-sender/email-sender.module';
     ProductsModule,
     CategoriesModule,
     AuthModule,
+    EmailSenderModule,
 
     ConfigModule.forRoot({
       isGlobal: true,
@@ -38,9 +39,7 @@ import { EmailSenderModule } from './email-sender/email-sender.module';
         entities: [CategoryEntity, ProductEntity, UserEntity],
         synchronize: true
       })
-    }),
-
-    EmailSenderModule
+    })
   ]
 })
 
