@@ -54,7 +54,7 @@ export class UsersService {
   } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
 
   async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserEntity | null> {
-    return this.usersRepository.findOneByVerificationToken(resetPasswordToken);
+    return this.usersRepository.findOneByResetPasswordToken(resetPasswordToken);
   } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
 
   async count(): Promise<number> {

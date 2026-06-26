@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services';
-import { firstValueFrom, interval } from 'rxjs';
+import { firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-verify-pending',
@@ -10,10 +9,8 @@ import { firstValueFrom, interval } from 'rxjs';
   styleUrl: './verify-pending.css',
 })
 export class VerifyPending implements OnInit {
-  private router = inject(Router);
   private authService = inject(AuthService);
 
-  // prueba con intervalo
   private unlocksAt: number | null = Date.now() + 20000;
   secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
@@ -30,7 +27,6 @@ export class VerifyPending implements OnInit {
     if (!this.canResend) return;  
     this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
-    console.log(localStorage.getItem('access_token'));
     await firstValueFrom(this.authService.resendVerification());
   }
 

@@ -55,4 +55,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
     canActivate: [],
   },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
+    canActivate: []
+  },
 ];

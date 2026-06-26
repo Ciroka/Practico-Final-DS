@@ -42,7 +42,7 @@ export class EmailSenderService {
 
     async sendEmailResetPassword(token: string, to: string): Promise<void> {
         const subject = 'Reset your password';
-        const html = `<p>Email password reset.</p> <a href=http://localhost:4200/reset-password?token=${token}">Reset your password</a>`;
+        const html = `<p>Email password reset.</p> <a href="http://localhost:4200/reset-password?token=${token}">Reset your password</a>`;
         await this.sendEmail(to, subject, html);
     }
 }

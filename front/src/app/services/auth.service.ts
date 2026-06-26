@@ -58,7 +58,7 @@ export class AuthService {
     return this.user()?.role === 'admin';
   }
 
-  verifyEmail(token: string): Observable<{ message: string }> {
+  verifyEmail(token: string): Observable<AuthMessageResponse> {
     return this.http.post<AuthMessageResponse>(`${this.api}/verify-email`, { token });
   }
 
@@ -66,12 +66,12 @@ export class AuthService {
     return this.http.post<void>(`${this.api}/resend-verification`, {});
   }
 
-  forgotPassword(email: string): Observable<{ message: string }> {
+  forgotPassword(email: string): Observable<AuthMessageResponse> {
     return this.http.post<AuthMessageResponse>(`${this.api}/forgot-password`, { email });
   }
 
-  resetPassword(token: string, password: string): Observable<{ message: string }> {
-    return this.http.post<AuthMessageResponse>(`${this.api}/reset-password`, { token, password });
+  resetPassword(token: string, password: string): Observable<AuthMessageResponse> {
+    return this.http.post<AuthMessageResponse>(`${this.api}/reset-password`, { token , password });
   }
 
   private handleAuth(res: AuthResponse): void {
@@ -84,7 +84,7 @@ export class AuthService {
   }
 
   clearToken(): void {
-  localStorage.removeItem(this.tokenKey);
-  this.user.set(null);
-}
+    localStorage.removeItem(this.tokenKey);
+    this.user.set(null);
+  }
 }
