@@ -1,11 +1,22 @@
-import { Component } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
+import { AuthService } from "../../services";
+import { FormsModule } from "@angular/forms";
+import { firstValueFrom } from "rxjs";
+import { AuthMessageResponse } from "../../interfaces";
 
 @Component({
     selector:'app-forgot-password',
-    imports:[],
+    imports:[FormsModule],
     templateUrl: './forgot-password.html',
     styleUrl: './forgot-password.css', 
 })
 export class ForgotPasswordPage{
-    password = ""
+    private authService = inject(AuthService);
+    password = '';
+    message = signal<AuthMessageResponse | null>(null);
+    email= '';
+
+    async sendEmail(){
+        this.message.set (await firstValueFrom(this.authService.forgotPassword(this.email)));
+    }
 }     

@@ -17,17 +17,15 @@ export class AuthService {
     private router: Router,
   ) {
     const token = this.getToken();
-    console.log('token:', token);
-    console.log('token length:', token?.length);
     if (token) {
       this.me().subscribe();
     }
   }
 
   register(dto: RegisterDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.api}/register`, dto)/*.pipe(
-      tap((res) => this.handleAuth(res))
-    );*/
+    return this.http.post<AuthResponse>(`${this.api}/register`, dto).pipe(
+    tap((res) => localStorage.setItem(this.tokenKey, res.access_token))
+    );
   }
 
   login(dto: LoginDto): Observable<AuthResponse> {
@@ -84,4 +82,9 @@ export class AuthService {
   getUser(){
     return this.user;
   }
+
+  clearToken(): void {
+  localStorage.removeItem(this.tokenKey);
+  this.user.set(null);
+}
 }

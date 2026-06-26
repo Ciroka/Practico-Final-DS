@@ -27,6 +27,7 @@ export class VerifyEmail implements OnInit {
       }
       try {
         this.message = await firstValueFrom(this.authService.verifyEmail(token));
+        this.authService.clearToken();
         this.status.set(true);
       } catch (error: any){
         const http = error as HttpErrorResponse;

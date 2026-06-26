@@ -53,6 +53,10 @@ export class UsersService {
     return this.usersRepository.findOneByVerificationToken(verificationToken);
   } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
 
+  async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserEntity | null> {
+    return this.usersRepository.findOneByVerificationToken(resetPasswordToken);
+  } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
+
   async count(): Promise<number> {
     return this.usersRepository.count();
   }
@@ -77,6 +81,12 @@ export class UsersService {
     await this.update(user);
   }
   
+  async resetPassword(user: UserEntity): Promise<void> {
+    user.isVerified = true;
+    user.verificationToken = null;
+    await this.update(user);
+  }
+
   async update (user: DeepPartial<UserEntity>): Promise<void> {
     await this.usersRepository.update(user);
   }

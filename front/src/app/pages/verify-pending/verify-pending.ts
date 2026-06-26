@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services';
 import { firstValueFrom, interval } from 'rxjs';
@@ -9,14 +9,18 @@ import { firstValueFrom, interval } from 'rxjs';
   templateUrl: './verify-pending.html',
   styleUrl: './verify-pending.css',
 })
-export class VerifyPending {
+export class VerifyPending implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
 
   // prueba con intervalo
-  private unlocksAt: number | null = null;
-  secondsLeft = signal(0);
+  private unlocksAt: number | null = Date.now() + 20000;
+  secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
+
+  ngOnInit(): void {
+    this.startCoundown();
+  }
 
   get canResend() {
     return this.unlocksAt === null || Date.now() >= this.unlocksAt;
@@ -24,9 +28,9 @@ export class VerifyPending {
 
   async resend() {
     if (!this.canResend) return;  
-    this.unlocksAt = Date.now() + 60000;
+    this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
-    
+    console.log(localStorage.getItem('access_token'));
     await firstValueFrom(this.authService.resendVerification());
   }
 

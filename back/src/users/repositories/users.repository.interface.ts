@@ -9,6 +9,7 @@ export interface IUsersRepository {
     findOneById(id: string): Promise<UserEntity | null>;
     findOneByEmailWithPassword(email: string): Promise<UserEntity | null>;
     findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null>;
+    findOneByResetPasswordToken(verificationToken: string): Promise<UserEntity | null>;
     count(): Promise<number>;
     register(user: DeepPartial<UserEntity>): Promise<UserEntity>;
     existsByEmail(email: string): Promise<boolean>;

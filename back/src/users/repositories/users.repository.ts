@@ -33,6 +33,10 @@ export class UsersRepository implements IUsersRepository {
         return this.usersRepo.findOneBy({verificationToken});
     }
 
+    async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserEntity | null>{
+        return this.usersRepo.findOneBy({resetPasswordToken})
+    }
+
     async count(): Promise<number> {
         return this.usersRepo.count();
     }

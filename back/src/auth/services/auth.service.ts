@@ -108,7 +108,7 @@ export class AuthService {
         return { message: "Email verificado correctamente" };
     }
 
-    async resendVerificationEmail(id: string) {
+    async resendVerificationEmail(id: string): Promise<void> {
         const user = await this.usersService.findOneById(id);
 
         const token = crypto.randomUUID();
@@ -116,5 +116,38 @@ export class AuthService {
         
         await this.usersService.update(user);
         await this.emailSenderService.sendEmailVerification(token, user.email);
+    }
+
+    async forgotPassword(email: string): Promise<UserMessageResponse>{
+        console.log(email);
+        const user = await this.usersService.findOneByEmail(email);
+        if (user){
+            const resetPasswordToken = crypto.randomUUID();
+            const resetPasswordExpires = new Date(Date.now() + 3600 * 1000); 
+
+            user.resetPasswordToken;
+            user.resetPasswordExpires = resetPasswordExpires;
+            await this.usersService.update(user);
+            await this.emailSenderService.sendEmailResetPassword(resetPasswordToken, email);
+        }
+        return {
+            message: "Si el email existe, recibirás un link"
+        }
+    }
+
+    async resetPassword (token: string, password: string):Promise<UserMessageResponse> {
+        const user = await this.usersService.findOneByResetPasswordToken(token);
+        if(!user) throw new BadRequestException("Token inválido o expirado");
+        if(!user.resetPasswordExpires) throw new BadRequestException("Token inválido o expirado");
+        
+        if (user.resetPasswordExpires > new Date(Date.now() +3600 * 1000)) throw new BadRequestException ("Token inválido o expirado")
+        
+            const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
+            user.passwordHash = await bcrypt.hash(password, rounds);
+            user.resetPasswordExpires = null;
+            user.resetPasswordToken = null;
+        return {
+            message: "Contraseña actualizada"
+        }
     }
 }
