@@ -97,7 +97,7 @@ export class UsersService {
     await this.usersRepository.update(user);
   }
 
-  async updatePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse>{
+  async updatePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse> {
     const user = await this.usersRepository.findOneByIdWithPassword(id);
     if (!user || !(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
     const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
@@ -111,8 +111,8 @@ export class UsersService {
   }
 
   async updateEmail(id: string, dto: UserChangeEmailDto): Promise<UserMessageResponse> {
-    const user = await this.findOneById(id);
-    if (!(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+    const user = await this.usersRepository.findOneByIdWithPassword(id);
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
 
     user.email = dto.newEmail;
 
@@ -123,9 +123,9 @@ export class UsersService {
     }
   }
 
-  async deleteAccount (id: string, dto: UserDeleteAccountDto): Promise<UserMessageResponse>{
-    const user = await this.findOneById(id);
-    if (!(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+  async deleteAccount(id: string, dto: UserDeleteAccountDto): Promise<UserMessageResponse> {
+    const user = await this.usersRepository.findOneByIdWithPassword(id);
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
     await this.usersRepository.delete(user);
     return {
       message: "Account deleted"

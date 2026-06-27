@@ -3,6 +3,7 @@ import { DatePipe} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -12,6 +13,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class ProfilePage {
   authService = inject(AuthService);
+  private router = inject(Router);
   user = this.authService.getUser();
   private unlocksAt: number | null = null;
   secondsLeft = signal(20);
@@ -54,6 +56,14 @@ export class ProfilePage {
   
   logout() {
     this.authService.logout()
+  }
+
+  goToChangePassword() {
+    this.router.navigate(['/change-password']);
+  }
+ 
+  goToChangeEmail() {
+    this.router.navigate(['/change-email']);
   }
   
   ngOnDestroy() {

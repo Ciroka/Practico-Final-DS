@@ -6,7 +6,7 @@ import { UserRole } from '../../shared/enums';
 import { UserExternal, UserResponse, UpdateUserRoleDto } from '../dto';
 import { UsersService } from '../services/users.service';
 import { UserChangePasswordDto } from '../dto/request/change-password.dto';
-import { UserMessageResponse } from 'src/auth/dto';
+import { UserMessageResponse } from '../../auth/dto';
 import { UserChangeEmailDto } from '../dto/request/user-change-email.dto';
 import { UserDeleteAccountDto } from '../dto/request/user-delete-account.dto';
 
