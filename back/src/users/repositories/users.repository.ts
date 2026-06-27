@@ -29,6 +29,13 @@ export class UsersRepository implements IUsersRepository {
                             .getOne();
     }
 
+    async findOneByIdWithPassword(id: string): Promise<UserEntity | null> {
+        return this.usersRepo.createQueryBuilder('u')
+                            .addSelect('u.passwordHash')
+                            .where('u.id = :id', { id })
+                            .getOne();
+    }
+
     async findOneByVerificationToken(verificationToken: string){
         return this.usersRepo.findOneBy({verificationToken});
     }

@@ -42,7 +42,7 @@ export default [
             stock: z.number().int().min(0).optional(),
             categoryId: z.number().int().optional()
         },
-        handler: async ({id ,...body}: any) => api.patch(`/products/${id}`, body)
+        handler: async ({id ,...body}: any) => api.put(`/products/${id}`, body)
     },
     {
         name: "delete_products",

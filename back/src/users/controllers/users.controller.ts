@@ -40,19 +40,19 @@ export class UsersController {
     return this.usersService.updateRole(id, dto);
   }
 
-  @Patch("/users/me/password")
+  @Patch("me/password")
   @UseGuards(JwtAuthGuard)
   async updatePassword (@Request() req: any, @Body() dto: UserChangePasswordDto): Promise<UserMessageResponse>{
     return this.usersService.updatePassword(req.user.sub, dto)
   }
 
-  @Patch("/users/me/email")
+  @Patch("me/email")
   @UseGuards(JwtAuthGuard)
   async updateEmail (@Request() req: any, @Body() dto: UserChangeEmailDto): Promise<UserMessageResponse>{
     return this.usersService.updateEmail(req.user.sub, dto)
   }
 
-  @Delete("/users/me")
+  @Delete("me")
   @UseGuards(JwtAuthGuard)
   async deleteAccount (@Request() req: any, dto: UserDeleteAccountDto): Promise<UserMessageResponse>{
     return this.usersService.deleteAccount(req.user.sub, dto);
