@@ -1,22 +1,22 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
-
+import { Component, inject, OnInit, signal} from '@angular/core';
+import { DatePipe} from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
 export class ProfilePage {
   authService = inject(AuthService);
   user = this.authService.getUser();
-
   private unlocksAt: number | null = null;
   secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.startCoundown();
