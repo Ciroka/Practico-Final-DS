@@ -98,8 +98,8 @@ export class UsersService {
   }
 
   async updatePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse>{
-    const user = await this.findOneById(id);
-    if (!(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+    const user = await this.usersRepository.findOneByIdWithPassword(id);
+    if (!user || !(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
     const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
     const passwordHash = await bcrypt.hash(dto.newPassword, rounds);
 
