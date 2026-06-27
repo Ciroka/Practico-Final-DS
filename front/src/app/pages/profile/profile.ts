@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, signal} from '@angular/core';
-import { DatePipe} from '@angular/common';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit, OnDestroy {
   authService = inject(AuthService);
   user = this.authService.getUser();
   private unlocksAt: number | null = null;
@@ -50,9 +50,9 @@ export class ProfilePage {
     const diff = Math.ceil((this.unlocksAt - Date.now()) / 1000);
     this.secondsLeft.set(Math.max(0, diff));
   }
-  
+
   logout() {
-    this.authService.logout()
+    this.authService.logout();
   }
 
   ngOnDestroy() {
