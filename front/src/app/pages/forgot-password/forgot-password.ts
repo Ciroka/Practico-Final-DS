@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { AuthMessageResponse } from '../../interfaces';
@@ -12,13 +12,14 @@ import { AuthMessageResponse } from '../../interfaces';
 })
 export class ForgotPasswordPage {
     private authService = inject(AuthService);
+    private intervalId: ReturnType<typeof setInterval> | null = null;
+    private unlocksAt: number | null = null;
+    private toastService = inject(ToastService);
+    
     password = '';
     message = signal<AuthMessageResponse | null>(null);
     email = '';
-
-    private unlocksAt: number | null = null;
     secondsLeft = signal(20);
-    private intervalId: ReturnType<typeof setInterval> | null = null;
 
     ngOnInit(): void {
         this.startCoundown();
@@ -56,5 +57,10 @@ export class ForgotPasswordPage {
         this.unlocksAt = Date.now() + 20000;
         this.startCoundown();
         this.message.set(await firstValueFrom(this.authService.forgotPassword(this.email)));
+        this.mostrarMsjInfo();
+    }
+
+    mostrarMsjInfo(){
+        this.toastService.info({message: this.message()!.message});
     }
 }

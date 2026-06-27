@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { ProductsService } from '../../services';
+import { ProductsService, ToastService } from '../../services';
 import { Product } from '../../models/product.model';
 
 @Component({
@@ -14,6 +14,7 @@ import { Product } from '../../models/product.model';
 export class ProductDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private productsService = inject(ProductsService);
+  private toastService = inject(ToastService);
 
   product = signal<Product | null>(null);
   error = '';
@@ -25,6 +26,11 @@ export class ProductDetailPage implements OnInit {
       this.product.set(p);
     } catch {
       this.error = 'Producto no encontrado';
+      this.mostrarMsjError();
     }
+  }
+
+  mostrarMsjError(){
+  this.toastService.error({message: this.error})
   }
 }

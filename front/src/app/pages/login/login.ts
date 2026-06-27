@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +12,9 @@ import { AuthService } from '../../services';
   styleUrl: './login.css',
 })
 export class LoginPage {
-  private auth = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   email = '';
   password = '';
@@ -24,12 +25,17 @@ export class LoginPage {
     this.error = '';
     this.loading.set(true);
     try {
-      await firstValueFrom(this.auth.login({ email: this.email, password: this.password }));
+      await firstValueFrom(this.authService.login({ email: this.email, password: this.password }));
       this.router.navigate(['/']);
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al iniciar sesión';
+      this.error = 'Error al iniciar sesión';
+      this.mostrarMsjError();
     } finally {
       this.loading.set(false);
     }
+  }
+
+  mostrarMsjError(){
+    this.toastService.error({message: this.error});
   }
 }

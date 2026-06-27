@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 import { firstValueFrom} from 'rxjs';
+import { AuthMessageResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-verify-pending',
@@ -10,13 +11,15 @@ import { firstValueFrom} from 'rxjs';
 })
 export class VerifyPending implements OnInit {
   private authService = inject(AuthService);
-
+  private toastService = inject(ToastService);
   private unlocksAt: number | null = Date.now() + 20000;
-  secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
+  
+  secondsLeft = signal(20);
 
   ngOnInit(): void {
     this.startCoundown();
+    //this.toastService();
   }
 
   get canResend() {
@@ -27,7 +30,8 @@ export class VerifyPending implements OnInit {
     if (!this.canResend) return;  
     this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
-    await firstValueFrom(this.authService.resendVerification());
+    const message = await firstValueFrom(this.authService.resendVerification());
+    this.mostrarMsjInfo(message);
   }
 
   private startCoundown() {
@@ -51,5 +55,9 @@ export class VerifyPending implements OnInit {
 
   ngOnDestroy() {
     if (this.intervalId) clearInterval(this.intervalId);
+  }
+
+  mostrarMsjInfo(message: AuthMessageResponse){
+    this.toastService.info(message);
   }
 }

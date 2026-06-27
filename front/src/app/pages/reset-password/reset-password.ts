@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthMessageResponse } from '../../interfaces';
@@ -12,9 +12,10 @@ import { AuthMessageResponse } from '../../interfaces';
   styleUrl: './reset-password.css',
 })
 export class ResetPassword implements OnInit{
-  private auth = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute)
+  private toastService = inject(ToastService);
 
   password = '';
   confirmPassword = '';
@@ -34,19 +35,30 @@ export class ResetPassword implements OnInit{
 
     if (this.password !== this.confirmPassword) {
       this.error = 'Las contraseñas no coinciden';
+      this.mostrarMsjError();
       this.loading.set(false);
       return;
     }
 
     try {
-      this.message = await firstValueFrom(this.auth.resetPassword(this.token! ,this.password));
+      this.message = await firstValueFrom(this.authService.resetPassword(this.token! ,this.password));
+      this.mostrarMsjSuccess();
       setTimeout(() => {
         this.router.navigate(['/login']);
     }, 2500);
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al actualizar la contraseña';
+      this.error = err.error.message;
+      this.mostrarMsjError();
     } finally {
       this.loading.set(false);
     }
+  }
+
+  mostrarMsjError(){
+    this.toastService.error({message: this.error});
+  }
+
+  mostrarMsjSuccess(){
+    this.toastService.success({message: this.message.message});
   }
 }

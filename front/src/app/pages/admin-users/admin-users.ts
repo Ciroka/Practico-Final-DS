@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
-import { UsersService, AuthService } from '../../services';
+import { UsersService, AuthService, ToastService } from '../../services';
 import { SafeUser, UserRole } from '../../interfaces';
 
 @Component({
@@ -14,7 +14,8 @@ import { SafeUser, UserRole } from '../../interfaces';
 })
 export class AdminUsersPage implements OnInit {
   private usersService = inject(UsersService);
-  auth = inject(AuthService);
+  authService = inject(AuthService);
+  toastrService = inject(ToastService);
 
   users = signal<SafeUser[]>([]);
   error = '';
@@ -25,6 +26,7 @@ export class AdminUsersPage implements OnInit {
       this.users.set(users);
     } catch {
       this.error = 'Error al cargar usuarios';
+      this.mostrarMsjError();
     }
   }
 
@@ -35,7 +37,12 @@ export class AdminUsersPage implements OnInit {
         users.map((u) => (u.id === updated.id ? updated : u)),
       );
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al cambiar rol';
+      this.error = 'Error al cambiar rol';
+      this.mostrarMsjError()
     }
+  }
+
+  mostrarMsjError() {
+    this.toastrService.error({ message: this.error });
   }
 }

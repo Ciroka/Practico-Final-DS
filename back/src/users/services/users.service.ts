@@ -1,10 +1,14 @@
 import { DeepPartial } from 'typeorm';
-import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-
+import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UserResponse, UserExternal, UpdateUserRoleDto } from '../dto';
 import { USERS_GATEWAY, UsersGateway } from '../gateways/users.gateway';
 import { IUsersRepository, USERS_REPOSITORY } from '../repositories/users.repository.interface';
 import { UserEntity } from '../entities/user.entity';
+import { UserChangePasswordDto } from '../dto/request/change-password.dto';
+import { ConfigService } from '@nestjs/config';
+import { UserMessageResponse } from 'src/auth/dto';
+import { UserChangeEmailDto } from '../dto/request/user-change-email.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +16,8 @@ export class UsersService {
     @Inject(USERS_GATEWAY)
     private readonly usersGateway: UsersGateway,
     @Inject(USERS_REPOSITORY)
-    private readonly usersRepository: IUsersRepository
+    private readonly usersRepository: IUsersRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   async findAllExt(): Promise<UserExternal[]> {
@@ -51,11 +56,11 @@ export class UsersService {
 
   async findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneByVerificationToken(verificationToken);
-  } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
+  } 
 
   async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneByResetPasswordToken(resetPasswordToken);
-  } // preguntar al profe en que servicio lanzamos la excepcio, nosotros nos gusta mas en auth.service.ts
+  } 
 
   async count(): Promise<number> {
     return this.usersRepository.count();
@@ -89,5 +94,31 @@ export class UsersService {
 
   async update (user: DeepPartial<UserEntity>): Promise<void> {
     await this.usersRepository.update(user);
+  }
+
+  async changePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse>{
+    const user = await this.findOneById(id);
+    if (!(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+    const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
+    const passwordHash = await bcrypt.hash(dto.newPassword, rounds);
+
+    user.passwordHash = passwordHash;
+    await this.update(user);
+    return {
+      message: "Password updated"
+    }
+  }
+
+  async changeEmail(id: string, dto: UserChangeEmailDto): Promise<UserMessageResponse> {
+    const user = await this.findOneById(id);
+    if (!(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+
+    user.email = dto.newEmail;
+
+    await this.update(user);
+
+    return {
+      message: "Email updated"
+    }
   }
 }

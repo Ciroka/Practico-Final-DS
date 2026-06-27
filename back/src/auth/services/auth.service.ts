@@ -86,7 +86,6 @@ export class AuthService {
 
     async me(userId: string): Promise<UserMeResponse> {
         try {
-            console.log(userId);
             const user = await this.usersService.findOneById(userId);
             return {
                 id: user.id,
@@ -96,7 +95,21 @@ export class AuthService {
                 isVerified: user.isVerified
             };
         } catch {
-            throw new UnauthorizedException("Bro me");
+            throw new UnauthorizedException();
+        }
+    }
+
+    async resendVerificationEmail(id: string): Promise<UserMessageResponse> {
+        const user = await this.usersService.findOneById(id);
+        
+        const token = crypto.randomUUID();
+        user.verificationToken = token;
+        
+        await this.usersService.update(user);
+        await this.emailSenderService.sendEmailVerification(token, user.email);
+
+        return {
+            message: "Email enviado"
         }
     }
 
@@ -106,16 +119,6 @@ export class AuthService {
 
         await this.usersService.verifyEmail(user);
         return { message: "Email verificado correctamente" };
-    }
-
-    async resendVerificationEmail(id: string): Promise<void> {
-        const user = await this.usersService.findOneById(id);
-
-        const token = crypto.randomUUID();
-        user.verificationToken = token;
-        
-        await this.usersService.update(user);
-        await this.emailSenderService.sendEmailVerification(token, user.email);
     }
 
     async forgotPassword(email: string): Promise<UserMessageResponse>{
@@ -137,7 +140,6 @@ export class AuthService {
     async resetPassword (token: string, password: string):Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByResetPasswordToken(token);
         if(!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) throw new BadRequestException("Token inválido o expirado");
-        console.log("aura")
         const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
         user.passwordHash = await bcrypt.hash(password, rounds);
         user.resetPasswordExpires = null;

@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
 import { CreateProductDto, UpdateProductDto } from '../../interfaces';
-import { CategoriesService, ProductsService, AuthService } from '../../services';
+import { CategoriesService, ProductsService, AuthService, ToastService } from '../../services';
 import { Category } from '../../models/category.model';
 import { Product } from '../../models/product.model';
 import { SortEnum } from '../../types/sort.enum';
@@ -20,7 +20,8 @@ import { OrderEnum } from '../../types/order.enum';
 export class ProductsPage implements OnInit {
   private productsService = inject(ProductsService);
   private categoriesService = inject(CategoriesService);
-  auth = inject(AuthService);
+  private toastService = inject(ToastService);
+  authService = inject(AuthService);
 
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
@@ -65,6 +66,7 @@ export class ProductsPage implements OnInit {
       this.total = res.total;
     } catch (err) {
       this.error = 'Error al cargar productos';
+      this.mostrarMsjError(this.error);
     } finally {
       this.loading.set(false);
     }
@@ -125,7 +127,7 @@ export class ProductsPage implements OnInit {
       if (this.editingProduct()) {
         const dto: UpdateProductDto = {
           name: this.formName,
-          price: parseFloat(this.formPrice.toString()), // debería ser price: this.formPrice, no sé porque debo hacer toString y parseFloat
+          price: parseFloat(this.formPrice.toString()), 
           stock: this.formStock,
           categoryId: this.formCategoryId,
         };
@@ -142,7 +144,8 @@ export class ProductsPage implements OnInit {
       this.loadProducts();
       this.cancelForm();
     } catch (err: any) {
-      this.formError = err.error?.message || 'Error al guardar';
+      this.formError = 'Error al guardar el producto';
+      this.mostrarMsjError(this.formError)
     }
   }
 
@@ -152,7 +155,12 @@ export class ProductsPage implements OnInit {
       await firstValueFrom(this.productsService.remove(id));
       this.loadProducts();
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al eliminar';
+      this.error = 'Error al eliminar el producto';
+      this.mostrarMsjError(this.error);
     }
+  }
+
+  mostrarMsjError(error: string){
+    this.toastService.error({message: error});
   }
 }

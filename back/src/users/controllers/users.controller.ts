@@ -1,10 +1,13 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard, RolesGuard } from '../../shared/guards';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { UserRole } from '../../shared/enums';
 import { UserExternal, UserResponse, UpdateUserRoleDto } from '../dto';
 import { UsersService } from '../services/users.service';
+import { UserChangePasswordDto } from '../dto/request/change-password.dto';
+import { UserMessageResponse } from 'src/auth/dto';
+import { UserChangeEmailDto } from '../dto/request/user-change-email.dto';
 
 @Controller('users')
 export class UsersController {
@@ -35,4 +38,18 @@ export class UsersController {
   async updateRole(@Param('id') id: string, @Body() dto: UpdateUserRoleDto): Promise<UserResponse> {
     return this.usersService.updateRole(id, dto);
   }
+
+  @Patch("/users/me/password")
+  @UseGuards(JwtAuthGuard)
+  async changePassword (@Request() req: any, @Body() dto: UserChangePasswordDto): Promise<UserMessageResponse>{
+    return this.usersService.changePassword(req.user.sub, dto)
+  }
+
+  @Patch("/users/me/email")
+  @UseGuards(JwtAuthGuard)
+  async changeEmail (@Request() req: any, @Body() dto: UserChangeEmailDto): Promise<UserMessageResponse>{
+    return this.usersService.changeEmail(req.user.sub, dto)
+  }
+
+  
 }

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 import { firstValueFrom } from 'rxjs';
 import { AuthMessageResponse } from '../../interfaces';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,6 +15,9 @@ export class VerifyEmail implements OnInit {
     private route = inject(ActivatedRoute);
     private authService = inject(AuthService);
     private router = inject(Router);
+    private intervalId: ReturnType<typeof setInterval> | null = null;
+    private toastrService = inject(ToastService);
+    
     message!: AuthMessageResponse;
     status = signal(false);
     loading = signal(true);
@@ -27,14 +30,29 @@ export class VerifyEmail implements OnInit {
       }
       try {
         this.message = await firstValueFrom(this.authService.verifyEmail(token));
+        this.mostrarMsjExito();
         this.authService.clearToken();
         this.status.set(true);
       } catch (error: any){
         const http = error as HttpErrorResponse;
         this.message = {message: http.error.message};
+        this.mostrarMsjError();
         this.status.set(false);
       }finally{
         this.loading.set(false);
+        this.intervalId = setInterval(() => {
+          this.router.navigate(["/login"])
+          clearInterval(this.intervalId!);
+          this.intervalId = null;
+        }, 3000);
       }
+    }
+
+    mostrarMsjExito(){
+      this.toastrService.success(this.message);
+    }
+
+    mostrarMsjError(){
+      this.toastrService.error(this.message);
     }
 }

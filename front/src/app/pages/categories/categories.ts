@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
-import { CategoriesService, AuthService } from '../../services';
+import { CategoriesService, AuthService, ToastService } from '../../services';
 import { Category } from '../../models/category.model';
 
 @Component({
@@ -14,7 +14,8 @@ import { Category } from '../../models/category.model';
 })
 export class CategoriesPage implements OnInit {
   private service = inject(CategoriesService);
-  auth = inject(AuthService);
+  authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   categories = signal<Category[]>([]);
   editingCat = signal<Category | null>(null);
@@ -36,6 +37,7 @@ export class CategoriesPage implements OnInit {
       this.categories.set(cats);
     } catch {
       this.error = 'Error al cargar categorías';
+      this.mostrarMsjError(this.error);
     } finally {
       this.loading.set(false);
     }
@@ -48,7 +50,8 @@ export class CategoriesPage implements OnInit {
       this.newName = '';
       await this.load();
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al crear';
+      this.error = 'Error al crear categorías';
+      this.mostrarMsjError(this.error);
     }
   }
 
@@ -73,7 +76,8 @@ export class CategoriesPage implements OnInit {
       this.cancelEdit();
       await this.load();
     } catch (err: any) {
-      this.formError = err.error?.message || 'Error al actualizar';
+      this.formError = 'Error al actualizar categoría';
+      this.mostrarMsjError(this.formError);
     }
   }
 
@@ -83,7 +87,12 @@ export class CategoriesPage implements OnInit {
       await firstValueFrom(this.service.remove(id));
       await this.load();
     } catch (err: any) {
-      this.error = err.error?.message || 'Error al eliminar';
+      this.error = 'Error al eliminar categoría';
+      this.mostrarMsjError(this.error);
     }
+  }
+
+  mostrarMsjError(error: string){
+    this.toastService.error({message: error});
   }
 }

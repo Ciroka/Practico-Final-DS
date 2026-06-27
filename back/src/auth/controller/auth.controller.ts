@@ -28,17 +28,18 @@ export class AuthController {
         return this.authService.login(userLogin);
     }
 
+    @Post('resend-verification')
+    @UseGuards(JwtAuthGuard)
+    //Preguntar si esta metodo devuelve algo o algun message
+    async resendVerification(@Request() req: any): Promise<UserMessageResponse> {
+        return this.authService.resendVerificationEmail(req.user.sub);
+    }
+    
     @Post('verify-email')
     async verifyEmail(@Body() verificationToken: UserVerifyEmailRequest): Promise<UserMessageResponse> {
         return this.authService.verifyEmail(verificationToken.token);
     }
 
-    @Post('resend-verification')
-    @UseGuards(JwtAuthGuard)
-    //Preguntar si esta metodo devuelve algo o algun message
-    async resendVerification(@Request() req: any): Promise<void> {
-        return this.authService.resendVerificationEmail(req.user.sub);
-    }
 
     @Post('forgot-password')
     async forgotPassword(@Body() dto: UserEmailRequest): Promise<UserMessageResponse> {
