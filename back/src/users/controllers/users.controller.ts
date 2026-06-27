@@ -54,7 +54,7 @@ export class UsersController {
 
   @Delete("me")
   @UseGuards(JwtAuthGuard)
-  async deleteAccount (@Request() req: any, dto: UserDeleteAccountDto): Promise<UserMessageResponse>{
+  async deleteAccount (@Request() req: any, @Body() dto: UserDeleteAccountDto): Promise<UserMessageResponse>{
     return this.usersService.deleteAccount(req.user.sub, dto);
   }
 }

@@ -11,7 +11,7 @@ import { UsersService, ToastService } from '../../services';
   templateUrl: './change-email.html',
   styleUrl: './change-email.css',
 })
-export class ChangeEmailPage {
+export class ChangeEmail {
   private usersService = inject(UsersService);
   private toastService = inject(ToastService);
   private router = inject(Router);

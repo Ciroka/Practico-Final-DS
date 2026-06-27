@@ -3,7 +3,6 @@ import { DatePipe} from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +12,10 @@ import { Router } from '@angular/router';
 })
 export class ProfilePage {
   authService = inject(AuthService);
-  private router = inject(Router);
   user = this.authService.getUser();
   private unlocksAt: number | null = null;
   secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
-  private router = inject(Router);
 
   ngOnInit(): void {
     this.startCoundown();
@@ -58,14 +55,6 @@ export class ProfilePage {
     this.authService.logout()
   }
 
-  goToChangePassword() {
-    this.router.navigate(['/change-password']);
-  }
- 
-  goToChangeEmail() {
-    this.router.navigate(['/change-email']);
-  }
-  
   ngOnDestroy() {
     if (this.intervalId) clearInterval(this.intervalId);
   }

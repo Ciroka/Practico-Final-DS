@@ -11,7 +11,7 @@ import { UsersService, ToastService } from '../../services';
   templateUrl: './change-password.html',
   styleUrl: './change-password.css',
 })
-export class ChangePasswordPage {
+export class ChangePassword {
   private usersService = inject(UsersService);
   private toastService = inject(ToastService);
   private router = inject(Router);

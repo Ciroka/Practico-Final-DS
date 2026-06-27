@@ -115,7 +115,7 @@ export class UsersService {
     if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
 
     user.email = dto.newEmail;
-
+    user.isVerified = false
     await this.update(user);
 
     return {
