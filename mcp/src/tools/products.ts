@@ -1,4 +1,4 @@
-import { any, z } from "zod";
+import { z } from "zod";
 import { api } from "../api-client";
 import type { ToolDef } from "../tool-factory";
 
@@ -13,13 +13,13 @@ export default [
             page: z.number().int().min(1).optional(),
             limit: z.number().int().min(1).max(100).optional()
         },
-        handler: async (params: any) => api.get("/products", {params}),
+        handler: async (params: any) => api.get("/products", { params })
     },
     {
         name: "get_product",
         description: "Obtener uno",
-        inputSchema: {id: z.number().int()},
-        handler: async ({id}: any) => api.get(`/products/${id}`),
+        inputSchema: { id: z.number().int() },
+        handler: async ({ id }: any) => api.get(`/products/${id}`)
     },
     {
         name: "create_product",
@@ -42,12 +42,12 @@ export default [
             stock: z.number().int().min(0).optional(),
             categoryId: z.number().int().optional()
         },
-        handler: async ({id ,...body}: any) => api.put(`/products/${id}`, body)
+        handler: async ({ id, ...body }: any) => api.put(`/products/${id}`, body)
     },
     {
         name: "delete_products",
         description: "Eliminar",
-        inputSchema: {id: z.number().int()},
-        handler: async ({id}: any) => api.del(`/products/${id}`)
+        inputSchema: { id: z.number().int() },
+        handler: async ({ id }: any) => api.del(`/products/${id}`)
     }
 ] as ToolDef[];

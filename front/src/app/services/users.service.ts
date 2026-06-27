@@ -26,8 +26,7 @@ export class UsersService {
     return this.http.patch<MessageResponse>(`${this.api}/users/me/email`, dto);
   }
 
-  deleteAccount(dto: DeleteAccountDto ){
-    return this.http.delete<MessageResponse>(`${this.api}/users/me`, dto);
+  deleteAccount(body: DeleteAccountDto): Observable<MessageResponse> {
+    return this.http.delete<MessageResponse>(`${this.api}/users/me`, { body });
   }
 }
-

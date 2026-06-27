@@ -121,9 +121,10 @@ export class AuthService {
         return { message: "Email verificado correctamente" };
     }
 
-    async forgotPassword(email: string): Promise<UserMessageResponse>{
+    async forgotPassword(email: string): Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByEmail(email);
-        if (user){
+
+        if (user) {
             const resetPasswordToken = crypto.randomUUID();
             const resetPasswordExpires = new Date(Date.now() + 3600 * 1000); 
 
@@ -132,23 +133,23 @@ export class AuthService {
             await this.usersService.update(user);
             await this.emailSenderService.sendEmailResetPassword(resetPasswordToken, email);
         }
-        return {
-            message: "Si el email existe, recibirás un link"
-        }
+        return { message: "Si el email existe, recibirás un link" };
     }
 
-    async resetPassword (token: string, password: string):Promise<UserMessageResponse> {
+    async resetPassword(token: string, password: string):Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByResetPasswordToken(token);
-        if(!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) throw new BadRequestException("Token inválido o expirado");
+
+        if(!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) {
+            throw new BadRequestException("Token inválido o expirado");
+        }
+
         const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
+        
         user.passwordHash = await bcrypt.hash(password, rounds);
         user.resetPasswordExpires = null;
         user.resetPasswordToken = null;
-        
         await this.usersService.update(user);
 
-        return {
-            message: "Contraseña actualizada"
-        }
+        return { message: "Contraseña actualizada" };
     }
 }

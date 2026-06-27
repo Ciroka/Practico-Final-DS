@@ -1,14 +1,12 @@
-import { IsNotEmpty, IsString, IsUUID, isUUID, Min, MinLength } from "class-validator";
+import { IsNotEmpty, IsString, MinLength } from "class-validator";
 
-
-export class UserResetPassword {
-
+export class UserResetPasswordRequest {
     @IsString()
     @IsNotEmpty()
-    token!: string
+    token!: string;
     
     @IsString()
     @IsNotEmpty()
     @MinLength(8)
-    password!: string
+    password!: string;
 }

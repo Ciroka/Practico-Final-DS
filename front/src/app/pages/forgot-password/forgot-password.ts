@@ -16,7 +16,6 @@ export class ForgotPasswordPage {
     private unlocksAt: number | null = null;
     private toastService = inject(ToastService);
     
-    password = '';
     message = signal<MessageResponse | null>(null);
     email = '';
     secondsLeft = signal(20);
@@ -24,9 +23,18 @@ export class ForgotPasswordPage {
     ngOnInit(): void {
         this.startCoundown();
     }
-
+    
     get canResend() {
         return this.unlocksAt === null || Date.now() >= this.unlocksAt;
+    }
+
+    async sendEmail() {
+        if (!this.canResend) return;
+
+        this.unlocksAt = Date.now() + 20000;
+        this.startCoundown();
+        this.message.set(await firstValueFrom(this.authService.forgotPassword({email: this.email})));
+        this.mostrarMsjInfo();
     }
 
     private startCoundown() {
@@ -47,20 +55,12 @@ export class ForgotPasswordPage {
         const diff = Math.ceil((this.unlocksAt - Date.now()) / 1000);
         this.secondsLeft.set(Math.max(0, diff));
     }
-
+    
     ngOnDestroy() {
         if (this.intervalId) clearInterval(this.intervalId);
     }
 
-    async sendEmail() {
-        if (!this.canResend) return;
-        this.unlocksAt = Date.now() + 20000;
-        this.startCoundown();
-        this.message.set(await firstValueFrom(this.authService.forgotPassword({email: this.email})));
-        this.mostrarMsjInfo();
-    }
-
-    mostrarMsjInfo(){
+    mostrarMsjInfo() {
         this.toastService.info({message: this.message()!.message});
     }
 }

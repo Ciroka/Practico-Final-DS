@@ -1,15 +1,13 @@
-import { DeepPartial } from 'typeorm';
 import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DeepPartial } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UserResponse, UserExternal, UpdateUserRoleDto } from '../dto';
+
+import { UserResponse, UserExternal, UpdateUserRoleDto, UserChangePasswordDto,UserChangeEmailDto, UserDeleteAccountDto } from '../dto';
+import { UserMessageResponse } from '../../auth/dto';
 import { USERS_GATEWAY, UsersGateway } from '../gateways/users.gateway';
 import { IUsersRepository, USERS_REPOSITORY } from '../repositories/users.repository.interface';
 import { UserEntity } from '../entities/user.entity';
-import { UserChangePasswordDto } from '../dto/request/change-password.dto';
-import { ConfigService } from '@nestjs/config';
-import { UserMessageResponse } from 'src/auth/dto';
-import { UserChangeEmailDto } from '../dto/request/user-change-email.dto';
-import { UserDeleteAccountDto } from '../dto/request/user-delete-account.dto';
 
 @Injectable()
 export class UsersService {
@@ -52,7 +50,7 @@ export class UsersService {
   }
 
   async findOneByEmailWithPassword(email: string): Promise<UserEntity | null> {
-    return this.usersRepository.findOneByEmailWithPassword(email.trim().toLowerCase())
+    return this.usersRepository.findOneByEmailWithPassword(email.trim().toLowerCase());
   }
 
   async findOneByVerificationToken(verificationToken: string): Promise<UserEntity | null> {
@@ -99,36 +97,42 @@ export class UsersService {
 
   async updatePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse> {
     const user = await this.usersRepository.findOneByIdWithPassword(id);
-    if (!user || !(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+
+    if (!user || !(await bcrypt.compare(dto.currentPassword, user.passwordHash))) {
+      throw new UnauthorizedException("Credenciales inválidas");
+    }
+
     const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
     const passwordHash = await bcrypt.hash(dto.newPassword, rounds);
 
     user.passwordHash = passwordHash;
     await this.update(user);
-    return {
-      message: "Password updated"
-    }
+
+    return { message: "Password updated" };
   }
 
   async updateEmail(id: string, dto: UserChangeEmailDto): Promise<UserMessageResponse> {
     const user = await this.usersRepository.findOneByIdWithPassword(id);
-    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
+      throw new UnauthorizedException("Credenciales inválidas");
+    }
 
     user.email = dto.newEmail;
     user.isVerified = false
     await this.update(user);
 
-    return {
-      message: "Email updated"
-    }
+    return { message: "Email updated" };
   }
 
   async deleteAccount(id: string, dto: UserDeleteAccountDto): Promise<UserMessageResponse> {
     const user = await this.usersRepository.findOneByIdWithPassword(id);
-    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
-    await this.usersRepository.delete(user);
-    return {
-      message: "Account deleted"
+
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
+      throw new UnauthorizedException("Credenciales inválidas");
     }
+    await this.usersRepository.delete(user);
+    
+    return { message: "Account deleted" };
   }
 }

@@ -1,9 +1,9 @@
+import { Router } from '@angular/router';
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { MessageResponse, AuthResponse, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from '../interfaces/auth.interface';
 import { SafeUser } from '../interfaces/user.interface';
-import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -40,6 +40,22 @@ export class AuthService {
     );
   }
 
+  verifyEmail(dto: VerifyEmailDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/verify-email`, dto);
+  }
+
+  resendVerification(): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/resend-verification`, {});
+  }
+
+  forgotPassword(dto: ForgotPasswordDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/forgot-password`, dto);
+  }
+
+  resetPassword(dto: ResetPasswordDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/reset-password`, dto);
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.user.set(null);
@@ -57,34 +73,18 @@ export class AuthService {
   isAdmin(): boolean {
     return this.user()?.role === 'admin';
   }
-
-  verifyEmail(dto: VerifyEmailDto): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.api}/verify-email`, dto);
+  
+  getUser(){
+    return this.user;
   }
-
-  resendVerification(): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.api}/resend-verification`, {});
-  }
-
-  forgotPassword(dto: ForgotPasswordDto): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.api}/forgot-password`, dto);
-  }
-
-  resetPassword(dto: ResetPasswordDto): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.api}/reset-password`, dto);
+  
+  clearToken(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.user.set(null);
   }
 
   private handleAuth(res: AuthResponse): void {
     localStorage.setItem(this.tokenKey, res.access_token);
     this.user.set(res.user);
-  }
-
-  getUser(){
-    return this.user;
-  }
-
-  clearToken(): void {
-    localStorage.removeItem(this.tokenKey);
-    this.user.set(null);
   }
 }

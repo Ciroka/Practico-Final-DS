@@ -35,7 +35,7 @@ export class LoginPage {
     }
   }
 
-  mostrarMsjError(){
-    this.toastService.error({message: this.error});
+  mostrarMsjError() {
+    this.toastService.error({ message: this.error });
   }
 }

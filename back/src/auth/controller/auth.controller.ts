@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../shared/guards';
-import { UserLoginRequest, UserRegisterRequest, UserVerifyEmailRequest, UserLoginResponse, UserMeResponse, UserRegisterResponse, UserMessageResponse } from '../dto';
+import {
+    UserLoginRequest, UserRegisterRequest, UserVerifyEmailRequest, UserResetPasswordRequest, UserEmailRequest,
+    UserLoginResponse, UserMeResponse, UserRegisterResponse, UserMessageResponse
+} from '../dto';
 import { AuthService } from '../services/auth.service';
-import { UserResetPassword } from '../dto/request/user-reset-passwrod-request.dto';
-import { UserEmailRequest } from '../dto/request/user-email-request.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -28,9 +29,8 @@ export class AuthController {
         return this.authService.login(userLogin);
     }
 
-    @Post('resend-verification')
     @UseGuards(JwtAuthGuard)
-    //Preguntar si esta metodo devuelve algo o algun message
+    @Post('resend-verification')
     async resendVerification(@Request() req: any): Promise<UserMessageResponse> {
         return this.authService.resendVerificationEmail(req.user.sub);
     }
@@ -40,14 +40,13 @@ export class AuthController {
         return this.authService.verifyEmail(verificationToken.token);
     }
 
-
     @Post('forgot-password')
     async forgotPassword(@Body() dto: UserEmailRequest): Promise<UserMessageResponse> {
         return this.authService.forgotPassword(dto.email);
     }
 
     @Post('reset-password')
-    async resetPassword(@Body() dto: UserResetPassword ): Promise<UserMessageResponse> {
+    async resetPassword(@Body() dto: UserResetPasswordRequest): Promise<UserMessageResponse> {
         return this.authService.resetPassword(dto.token, dto.password);
     }
 }

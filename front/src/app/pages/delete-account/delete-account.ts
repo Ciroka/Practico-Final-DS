@@ -20,6 +20,7 @@ export class DeleteAccount {
 
   password = '';
   loading = signal(false);
+  error = '';
 
   async submit(): Promise<void> {
     this.loading.set(true);
@@ -27,12 +28,15 @@ export class DeleteAccount {
       const res = await firstValueFrom(
         this.usersService.deleteAccount({ password: this.password })
       );
+
       this.authService.clearToken();
       this.mostrarMsjExito(res.message);
-      setTimeout(() => this.router.navigate(['/register']), 3000);
+      setTimeout(() => {
+        this.router.navigate(['/register']);
+      }, 3000);
     } catch (err: any) {
-      const message = err?.error?.message ?? 'Error al eliminar la cuenta';
-      this.mostrarMsjError(message);
+      this.error = err?.error?.message ?? 'Error al eliminar la cuenta';
+      this.mostrarMsjError();
       this.loading.set(false);
     }
   }
@@ -41,7 +45,7 @@ export class DeleteAccount {
     this.toastService.success({ message });
   }
 
-  mostrarMsjError(message: string): void {
-    this.toastService.error({ message });
+  mostrarMsjError(): void {
+    this.toastService.error({ message: this.error });
   }
 }

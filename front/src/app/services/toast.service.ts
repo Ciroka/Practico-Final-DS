@@ -20,7 +20,7 @@ export class ToastService {
       timeOut: 2500,
       progressBar: true,
       closeButton: true
-    })
+    });
   }
 
   info(message: {message: string}, title: string = 'Aviso'): void {
@@ -28,6 +28,6 @@ export class ToastService {
       timeOut: 2500,
       progressBar: true,
       closeButton: true
-    })
+    });
   }
 }

@@ -24,6 +24,6 @@ export interface ResetPasswordDto {
   password: string;
 }
 
-export interface VerifyEmailDto extends Omit<ResetPasswordDto, "password">{}
+export interface VerifyEmailDto extends Omit<ResetPasswordDto, 'password'> {}
 
-export interface ForgotPasswordDto extends Omit<LoginDto, "password">{}
+export interface ForgotPasswordDto extends Omit<LoginDto, 'password'> {}

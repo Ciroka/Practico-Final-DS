@@ -1,4 +1,4 @@
-import { any, z } from "zod";
+import { z } from "zod";
 import { api } from "../api-client";
 import type { ToolDef } from "../tool-factory";
 
@@ -6,7 +6,7 @@ export default [
     {
         name: "list_users",
         description: "Listar usuarios",
-        handler: async () => api.get("/users"),
+        handler: async () => api.get("/users")
     },
     {
         name: "update_user_role",
@@ -15,7 +15,7 @@ export default [
             id: z.uuid(),
             rol: z.enum(["admin", "user"])
         },
-        handler: async ({id, ...body}: any) => api.post(`/users/${id}/role`, body),
+        handler: async ({ id, ...body }: any) => api.post(`/users/${id}/role`, body)
     },
     {
         name: "update_my_password",
@@ -24,7 +24,7 @@ export default [
             currentPassword: z.string(),
             newPassword: z.string().min(8),
         },
-        handler: async (body: any) => api.patch("/users/me/password", body),
+        handler: async (body: any) => api.patch("/users/me/password", body)
     },
     {
         name: "update_my_email",
@@ -33,6 +33,6 @@ export default [
             newEmail: z.email(),
             password: z.string(),
         },
-        handler: async (body: any) => api.patch("/users/me/email", body),
+        handler: async (body: any) => api.patch("/users/me/email", body)
     }
 ] as ToolDef[];

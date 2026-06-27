@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { AuthService, ToastService } from '../../services';
 import { firstValueFrom} from 'rxjs';
+
+import { AuthService, ToastService } from '../../services';
 import { MessageResponse } from '../../interfaces';
 
 @Component({
@@ -19,7 +20,6 @@ export class VerifyPending implements OnInit {
 
   ngOnInit(): void {
     this.startCoundown();
-    //this.toastService();
   }
 
   get canResend() {
@@ -53,11 +53,11 @@ export class VerifyPending implements OnInit {
     this.secondsLeft.set(Math.max(0, diff));
   }
 
-  ngOnDestroy() {
-    if (this.intervalId) clearInterval(this.intervalId);
+  mostrarMsjInfo(message: MessageResponse) {
+    this.toastService.info(message);
   }
 
-  mostrarMsjInfo(message: MessageResponse){
-    this.toastService.info(message);
+  ngOnDestroy() {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 }

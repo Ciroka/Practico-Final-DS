@@ -34,8 +34,7 @@ export class ChangeEmail {
       setTimeout(() => this.router.navigate(['/login']), 3000);
     } catch (err: any) {
       this.error = err?.error?.message ?? 'Error al cambiar el email';
-      this.mostrarMsjError(this.error);
-    } finally {
+      this.mostrarMsjError();
       this.loading.set(false);
     }
   }
@@ -44,7 +43,7 @@ export class ChangeEmail {
     this.toastService.success({ message });
   }
 
-  mostrarMsjError(message: string): void {
-    this.toastService.error({ message });
+  mostrarMsjError(): void {
+    this.toastService.error({ message: this.error });
   }
 }

@@ -22,15 +22,14 @@ export class ProductDetailPage implements OnInit {
   async ngOnInit(): Promise<void> {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     try {
-      const p = await firstValueFrom(this.productsService.findOne(id));
-      this.product.set(p);
+      this.product.set(await firstValueFrom(this.productsService.findOne(id)));
     } catch {
       this.error = 'Producto no encontrado';
       this.mostrarMsjError();
     }
   }
 
-  mostrarMsjError(){
-  this.toastService.error({message: this.error})
+  mostrarMsjError() {
+    this.toastService.error({message: this.error})
   }
 }

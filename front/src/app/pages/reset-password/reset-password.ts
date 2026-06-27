@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AuthService, ToastService } from '../../services';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MessageResponse } from '../../interfaces';
 
@@ -11,7 +11,7 @@ import { MessageResponse } from '../../interfaces';
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
 })
-export class ResetPassword implements OnInit{
+export class ResetPassword implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute)
@@ -24,11 +24,10 @@ export class ResetPassword implements OnInit{
   loading = signal(false);
   message!: MessageResponse;
 
-  ngOnInit(){
-      this.token = this.route.snapshot.queryParamMap.get('token');
-      
+  ngOnInit() {
+    this.token = this.route.snapshot.queryParamMap.get('token');
   }
-  
+
   async submit(): Promise<void> {
     this.error = '';
     this.loading.set(true);
@@ -41,11 +40,12 @@ export class ResetPassword implements OnInit{
     }
 
     try {
-      this.message = await firstValueFrom(this.authService.resetPassword({token: this.token! ,password: this.password}));
+      this.message = await firstValueFrom(this.authService.resetPassword({ token: this.token!, password: this.password }));
       this.mostrarMsjSuccess();
+
       setTimeout(() => {
         this.router.navigate(['/login']);
-    }, 2500);
+      }, 2500);
     } catch (err: any) {
       this.error = err.error.message;
       this.mostrarMsjError();
@@ -54,11 +54,11 @@ export class ResetPassword implements OnInit{
     }
   }
 
-  mostrarMsjError(){
-    this.toastService.error({message: this.error});
+  mostrarMsjError() {
+    this.toastService.error({ message: this.error });
   }
 
-  mostrarMsjSuccess(){
-    this.toastService.success({message: this.message.message});
+  mostrarMsjSuccess() {
+    this.toastService.success({ message: this.message.message });
   }
 }

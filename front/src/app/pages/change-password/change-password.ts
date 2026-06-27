@@ -24,7 +24,8 @@ export class ChangePassword {
 
   async submit(): Promise<void> {
     if (this.newPassword !== this.confirmPassword) {
-      this.mostrarMsjError('Las contraseñas no coinciden');
+      this.error = 'Las contraseñas no coinciden';
+      this.mostrarMsjError();
       return;
     }
 
@@ -40,8 +41,7 @@ export class ChangePassword {
       setTimeout(() => this.router.navigate(['/login']), 3000);
     } catch (err: any) {
       this.error = err?.error?.message ?? 'Error al cambiar la contraseña';
-      this.mostrarMsjError(this.error);
-    } finally {
+      this.mostrarMsjError();
       this.loading.set(false);
     }
   }
@@ -50,7 +50,7 @@ export class ChangePassword {
     this.toastService.success({ message });
   }
 
-  mostrarMsjError(message: string): void {
-    this.toastService.error({ message });
+  mostrarMsjError(): void {
+    this.toastService.error({ message: this.error });
   }
 }

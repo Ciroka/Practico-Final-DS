@@ -44,7 +44,7 @@ export class RegisterPage {
     }
   }
 
-  mostrarMsjError(){
+  mostrarMsjError() {
     this.toastService.error({message: this.error});
   }
 }

@@ -1,3 +1,5 @@
+export type UserRole = 'admin' | 'user';
+
 export interface SafeUser {
   id: string;
   email: string;
@@ -5,8 +7,6 @@ export interface SafeUser {
   createdAt: Date;
   isVerified: boolean;
 }
-
-export type UserRole = 'admin' | 'user';
 
 export interface UpdateUserRoleDto {
   role: UserRole;
@@ -22,4 +22,4 @@ export interface UpdateEmailDto {
   password: string;
 }
 
-export interface DeleteAccountDto extends Omit<UpdateEmailDto, "newEmail">{}
+export interface DeleteAccountDto extends Omit<UpdateEmailDto, "newEmail"> {}
