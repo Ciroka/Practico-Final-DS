@@ -60,4 +60,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
     canActivate: []
   },
+  {
+    path: 'change-password',
+    loadComponent: () => import('./pages/change-password/change-password').then((m) => m.ChangePasswordPage),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'change-email',
+    loadComponent: () => import('./pages/change-email/change-email').then((m) => m.ChangeEmailPage),
+    canActivate: [authGuard],
+  },
 ];
