@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of, tap } from 'rxjs';
-import { AuthMessageResponse, AuthResponse, LoginDto, RegisterDto } from '../interfaces/auth.interface';
+import { Observable, tap } from 'rxjs';
+import { MessageResponse, AuthResponse, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from '../interfaces/auth.interface';
 import { SafeUser } from '../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -58,20 +58,20 @@ export class AuthService {
     return this.user()?.role === 'admin';
   }
 
-  verifyEmail(token: string): Observable<AuthMessageResponse> {
-    return this.http.post<AuthMessageResponse>(`${this.api}/verify-email`, { token });
+  verifyEmail(dto: VerifyEmailDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/verify-email`, dto);
   }
 
-  resendVerification(): Observable<AuthMessageResponse> {
-    return this.http.post<AuthMessageResponse>(`${this.api}/resend-verification`, {});
+  resendVerification(): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/resend-verification`, {});
   }
 
-  forgotPassword(email: string): Observable<AuthMessageResponse> {
-    return this.http.post<AuthMessageResponse>(`${this.api}/forgot-password`, { email });
+  forgotPassword(dto: ForgotPasswordDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/forgot-password`, dto);
   }
 
-  resetPassword(token: string, password: string): Observable<AuthMessageResponse> {
-    return this.http.post<AuthMessageResponse>(`${this.api}/reset-password`, { token , password });
+  resetPassword(dto: ResetPasswordDto): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.api}/reset-password`, dto);
   }
 
   private handleAuth(res: AuthResponse): void {

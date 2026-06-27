@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService, ToastService } from '../../services';
 import { firstValueFrom } from 'rxjs';
-import { AuthMessageResponse } from '../../interfaces';
+import { MessageResponse } from '../../interfaces';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,7 +18,7 @@ export class VerifyEmail implements OnInit {
     private intervalId: ReturnType<typeof setInterval> | null = null;
     private toastrService = inject(ToastService);
     
-    message!: AuthMessageResponse;
+    message!: MessageResponse;
     status = signal(false);
     loading = signal(true);
 
@@ -29,7 +29,7 @@ export class VerifyEmail implements OnInit {
         return;
       }
       try {
-        this.message = await firstValueFrom(this.authService.verifyEmail(token));
+        this.message = await firstValueFrom(this.authService.verifyEmail({token}));
         this.mostrarMsjExito();
         this.authService.clearToken();
         this.status.set(true);

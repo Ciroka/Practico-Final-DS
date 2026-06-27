@@ -9,6 +9,7 @@ import { UserChangePasswordDto } from '../dto/request/change-password.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserMessageResponse } from 'src/auth/dto';
 import { UserChangeEmailDto } from '../dto/request/user-change-email.dto';
+import { UserDeleteAccountDto } from '../dto/request/user-delete-account.dto';
 
 @Injectable()
 export class UsersService {
@@ -96,7 +97,7 @@ export class UsersService {
     await this.usersRepository.update(user);
   }
 
-  async changePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse>{
+  async updatePassword(id: string, dto: UserChangePasswordDto): Promise<UserMessageResponse>{
     const user = await this.findOneById(id);
     if (!(await bcrypt.compare(dto.currentPassword, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
     const rounds = Number(this.configService.get<string>('BCRYPT_COST') ?? '12');
@@ -109,7 +110,7 @@ export class UsersService {
     }
   }
 
-  async changeEmail(id: string, dto: UserChangeEmailDto): Promise<UserMessageResponse> {
+  async updateEmail(id: string, dto: UserChangeEmailDto): Promise<UserMessageResponse> {
     const user = await this.findOneById(id);
     if (!(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
 
@@ -119,6 +120,15 @@ export class UsersService {
 
     return {
       message: "Email updated"
+    }
+  }
+
+  async deleteAccount (id: string, dto: UserDeleteAccountDto): Promise<UserMessageResponse>{
+    const user = await this.findOneById(id);
+    if (!(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException("Credenciales inválidas");
+    await this.usersRepository.delete(user);
+    return {
+      message: "Account deleted"
     }
   }
 }

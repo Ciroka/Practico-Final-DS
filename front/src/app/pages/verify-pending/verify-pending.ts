@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService, ToastService } from '../../services';
 import { firstValueFrom} from 'rxjs';
-import { AuthMessageResponse } from '../../interfaces';
+import { MessageResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-verify-pending',
@@ -57,7 +57,7 @@ export class VerifyPending implements OnInit {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  mostrarMsjInfo(message: AuthMessageResponse){
+  mostrarMsjInfo(message: MessageResponse){
     this.toastService.info(message);
   }
 }

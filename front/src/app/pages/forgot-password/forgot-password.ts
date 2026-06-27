@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService, ToastService } from '../../services';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { AuthMessageResponse } from '../../interfaces';
+import { MessageResponse } from '../../interfaces';
 
 @Component({
     selector: 'app-forgot-password',
@@ -17,7 +17,7 @@ export class ForgotPasswordPage {
     private toastService = inject(ToastService);
     
     password = '';
-    message = signal<AuthMessageResponse | null>(null);
+    message = signal<MessageResponse | null>(null);
     email = '';
     secondsLeft = signal(20);
 
@@ -56,7 +56,7 @@ export class ForgotPasswordPage {
         if (!this.canResend) return;
         this.unlocksAt = Date.now() + 20000;
         this.startCoundown();
-        this.message.set(await firstValueFrom(this.authService.forgotPassword(this.email)));
+        this.message.set(await firstValueFrom(this.authService.forgotPassword({email: this.email})));
         this.mostrarMsjInfo();
     }
 

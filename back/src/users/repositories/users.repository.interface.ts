@@ -14,4 +14,5 @@ export interface IUsersRepository {
     register(user: DeepPartial<UserEntity>): Promise<UserEntity>;
     existsByEmail(email: string): Promise<boolean>;
     update(user: DeepPartial<UserEntity>): Promise<UserEntity>;
+    delete(user: UserEntity): Promise<void>;
 }

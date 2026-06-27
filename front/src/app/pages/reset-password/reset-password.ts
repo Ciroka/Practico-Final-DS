@@ -3,7 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService, ToastService } from '../../services';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuthMessageResponse } from '../../interfaces';
+import { MessageResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-reset-password',
@@ -22,7 +22,7 @@ export class ResetPassword implements OnInit{
   error = '';
   token: string | null = '';
   loading = signal(false);
-  message!: AuthMessageResponse;
+  message!: MessageResponse;
 
   ngOnInit(){
       this.token = this.route.snapshot.queryParamMap.get('token');
@@ -41,7 +41,7 @@ export class ResetPassword implements OnInit{
     }
 
     try {
-      this.message = await firstValueFrom(this.authService.resetPassword(this.token! ,this.password));
+      this.message = await firstValueFrom(this.authService.resetPassword({token: this.token! ,password: this.password}));
       this.mostrarMsjSuccess();
       setTimeout(() => {
         this.router.navigate(['/login']);

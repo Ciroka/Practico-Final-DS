@@ -53,4 +53,8 @@ export class UsersRepository implements IUsersRepository {
     async update(user: DeepPartial<UserEntity>): Promise<UserEntity> {
         return this.usersRepo.save(user);
     }
+
+    async delete(user: UserEntity): Promise<void> {
+        await this.usersRepo.remove(user);
+    }
 }
