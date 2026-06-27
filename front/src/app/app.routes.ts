@@ -63,12 +63,12 @@ export const routes: Routes = [
   {
     path: 'change-password',
     loadComponent: () => import('./pages/change-password/change-password').then((m) => m.ChangePassword),
-    canActivate: []
+    canActivate: [authGuard]
   },
   {
     path:'change-email',
     loadComponent: () => import('./pages/change-email/change-email').then((m) => m.ChangeEmail),
-    canActivate: [],
+    canActivate: [authGuard],
   },
   {
     path: 'delete-account',
