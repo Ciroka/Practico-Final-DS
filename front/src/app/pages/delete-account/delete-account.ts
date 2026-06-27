@@ -27,14 +27,12 @@ export class DeleteAccount {
       const res = await firstValueFrom(
         this.usersService.deleteAccount({ password: this.password })
       );
-      this.mostrarMsjExito(res.message);
-      // Limpiar sesión local antes de redirigir
       this.authService.clearToken();
+      this.mostrarMsjExito(res.message);
       setTimeout(() => this.router.navigate(['/register']), 3000);
     } catch (err: any) {
       const message = err?.error?.message ?? 'Error al eliminar la cuenta';
       this.mostrarMsjError(message);
-    } finally {
       this.loading.set(false);
     }
   }
