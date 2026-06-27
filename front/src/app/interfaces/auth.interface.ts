@@ -1,4 +1,3 @@
-import { VerifyEmail } from '../pages/verify-email/verify-email';
 import { SafeUser } from './user.interface';
 
 export interface RegisterDto {
