@@ -21,6 +21,7 @@ export class ChangeEmail {
   newEmail = '';
   password = '';
   loading = signal(false);
+  showPassword = signal(false);
 
   async submit(): Promise<void> {
     this.loading.set(true);
@@ -46,5 +47,9 @@ export class ChangeEmail {
 
   mostrarMsjError(): void {
     this.toastService.error({ message: this.error });
+  }
+
+  togglePassword(): void {
+    this.showPassword.update(v => !v);
   }
 }
