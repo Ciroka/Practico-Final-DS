@@ -18,11 +18,11 @@ export class UsersService {
     return this.http.patch<SafeUser>(`${this.api}/users/${id}/role`, dto);
   }
 
-  updatePassword(dto: UpdatePasswordDto ){
+  updatePassword(dto: UpdatePasswordDto): Observable<MessageResponse> {
     return this.http.patch<MessageResponse>(`${this.api}/users/me/password`, dto);
   }
 
-  updateEmail(dto: UpdateEmailDto ){
+  updateEmail(dto: UpdateEmailDto): Observable<MessageResponse> {
     return this.http.patch<MessageResponse>(`${this.api}/users/me/email`, dto);
   }
 

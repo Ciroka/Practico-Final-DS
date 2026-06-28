@@ -2,9 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { buildParams } from '../utils/build-params';
 import { CreateCategoryDto, UpdateCategoryDto, QueryProductsDto, PaginatedProducts } from '../interfaces';
 import { environment } from '../../environments/environment';
-import { Category } from '../models/category.model';
+import { Category } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesService {
@@ -21,7 +22,7 @@ export class CategoriesService {
 
   findProducts(id: number, query?: QueryProductsDto) {
     return this.http.get<PaginatedProducts>(`${this.api}/${id}/products`, {
-      params: this.buildParams(query)
+      params: buildParams(query)
     });
   }
 
@@ -35,18 +36,5 @@ export class CategoriesService {
 
   remove(id: number): Observable<Category> {
     return this.http.delete<Category>(`${this.api}/${id}`);
-  }
-
-  private buildParams(query?: QueryProductsDto) {
-    if (!query) return {};
-    
-    let params = new HttpParams();
-    if (query.name) params = params.set('name', query.name);
-    if (query.order) params = params.set('order', query.order);
-    if (query.sortBy) params = params.set('sortBy', query.sortBy);
-    if (query.page) params = params.set('page', query.page);
-    if (query.limit) params = params.set('limit', query.limit);
-    
-    return params;
   }
 }

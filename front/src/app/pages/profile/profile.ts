@@ -3,9 +3,8 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService, ToastService } from '../../services';
 import { MessageResponse } from '../../interfaces';
-import { ToastService } from '../../services';
 
 @Component({
   selector: 'app-profile',
@@ -27,11 +26,11 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.startCoundown();
   }
 
-  get canResend() {
+  get canResend(): boolean {
     return this.unlocksAt === null || Date.now() >= this.unlocksAt;
   }
 
-  async sendEmail() {
+  async sendEmail(): Promise<void> {
     if (!this.canResend) return;
     this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
@@ -39,7 +38,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.mostrarMsjInfo();
   }
 
-  private startCoundown() {
+  private startCoundown(): void {
     this.updateSecondsLeft();
 
     this.intervalId = setInterval(() => {
@@ -58,7 +57,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.secondsLeft.set(Math.max(0, diff));
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
   }
 
@@ -67,11 +66,11 @@ export class ProfilePage implements OnInit, OnDestroy {
     return `${user[0]}***${user[user.length - 1]}@${domain}`;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  mostrarMsjInfo(){
+  mostrarMsjInfo(): void {
     this.toastService.info(this.message);
   }
 }

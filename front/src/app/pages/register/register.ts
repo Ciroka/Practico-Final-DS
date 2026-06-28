@@ -49,12 +49,12 @@ export class RegisterPage {
     }
   }
 
-  mostrarMsjInfo(){
-    this.toastService.info({message: this.message})
+  mostrarMsjInfo(): void {
+    this.toastService.info({ message: this.message })
   }
 
-  mostrarMsjError() {
-    this.toastService.error({message: this.error});
+  mostrarMsjError(): void {
+    this.toastService.error({ message: this.error });
   }
 
   togglePassword(): void {

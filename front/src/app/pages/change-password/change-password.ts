@@ -32,7 +32,7 @@ export class ChangePassword {
       return;
     }
 
-    if(this.currentPassword === this.newPassword){
+    if (this.currentPassword === this.newPassword) {
       this.error = 'No puedes cambiar la contraseña a la misma que ya estás usando';
       this.mostrarMsjError();
       return;
@@ -63,15 +63,15 @@ export class ChangePassword {
     this.toastService.error({ message: this.error });
   }
 
-  togglePassword() {
+  togglePassword(): void {
     this.showPassword.update(v => !v);
   }
 
-  toggleNewPassword() {
+  toggleNewPassword(): void {
     this.showNewPassword.update(v => !v);
   }
 
-  toggleNewConfirmPassword() {
+  toggleNewConfirmPassword(): void {
     this.showNewConfirmPassword.update(v => !v);
   }
 }

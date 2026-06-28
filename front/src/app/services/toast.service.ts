@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
+import { MessageResponse } from '../interfaces';
+
 interface Toast {
   id: number;
   title: string;
@@ -14,14 +16,14 @@ interface Toast {
 export class ToastService {
   readonly toasts = signal<Toast[]>([]);
 
-  private addToast(toast: Omit<Toast, 'id'>) {
+  private addToast(toast: Omit<Toast, 'id'>): void {
     const id = Date.now();
     this.toasts.update(prev => [...prev, { ...toast, id, leaving: false }]);
 
     setTimeout(() => {
       this.toasts.update(prev =>
-        prev.map(t =>
-          t.id === id ? { ...t, leaving: true } : t
+        prev.map(toast =>
+          toast.id === id ? { ...toast, leaving: true } : toast
         )
       );
 
@@ -32,18 +34,30 @@ export class ToastService {
   }
 
   removeToast(id: number) {
-    this.toasts.update(prev => prev.filter(t => t.id !== id));
+    this.toasts.update(prev => prev.filter(toast => toast.id !== id));
   }
 
-  success(message: { message: string }): void {
-    this.addToast({ message: message.message, type: 'success', title: 'Operación exitosa'});
+  success(messageResponse: MessageResponse): void {
+    this.addToast({
+      message: messageResponse.message,
+      type: 'success',
+      title: 'Operación exitosa'
+    });
   }
 
-  error(message: { message: string }): void {
-    this.addToast({ message: message.message, type: 'error', title: 'Ha ocurrido un error' });
+  error(messageResponse: MessageResponse): void {
+    this.addToast({
+      message: messageResponse.message,
+      type: 'error',
+      title: 'Ha ocurrido un error'
+    });
   }
 
-  info(message: { message: string }): void {
-    this.addToast({ message: message.message, type: 'info', title: 'Aviso'});
+  info(messageResponse: MessageResponse): void {
+    this.addToast({
+      message: messageResponse.message,
+      type: 'info',
+      title: 'Aviso'
+    });
   }
 }

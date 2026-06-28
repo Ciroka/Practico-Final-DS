@@ -42,7 +42,7 @@ export class AdminUsersPage implements OnInit {
     }
   }
 
-  mostrarMsjError() {
+  mostrarMsjError(): void {
     this.toastService.error({ message: this.error });
   }
 }

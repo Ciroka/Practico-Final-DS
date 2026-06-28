@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { ProductsService, ToastService } from '../../services';
-import { Product } from '../../models/product.model';
+import { Product } from '../../models';
 
 @Component({
   selector: 'app-product-detail',
@@ -29,7 +29,7 @@ export class ProductDetailPage implements OnInit {
     }
   }
 
-  mostrarMsjError() {
-    this.toastService.error({message: this.error})
+  mostrarMsjError(): void {
+    this.toastService.error({ message: this.error });
   }
 }

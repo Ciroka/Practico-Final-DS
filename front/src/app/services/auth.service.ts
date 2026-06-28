@@ -1,7 +1,8 @@
 import { Router } from '@angular/router';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+
 import { MessageResponse, AuthResponse, ForgotPasswordDto, LoginDto, RegisterDto, ResetPasswordDto, VerifyEmailDto } from '../interfaces/auth.interface';
 import { SafeUser } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
@@ -18,25 +19,25 @@ export class AuthService {
   ) {
     const token = this.getToken();
     if (token) {
-      this.me().subscribe({ error: () => this.clearToken() }); // ESTO ARREGLA EL ERROR DE me(), expira el token, y tira error pero te deja navegar. Con esto, te logueas devuelta
+      this.me().subscribe({ error: () => this.clearToken() });
     }
   }
 
   register(dto: RegisterDto): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.api}/register`, dto).pipe(
-    tap((res) => localStorage.setItem(this.tokenKey, res.access_token))
+      tap((res) => localStorage.setItem(this.tokenKey, res.access_token))
     );
   }
 
   login(dto: LoginDto): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.api}/login`, dto).pipe(
-      tap((res) => this.handleAuth(res)),
+      tap((res) => this.handleAuth(res))
     );
   }
 
   me(): Observable<SafeUser> {
     return this.http.get<SafeUser>(`${this.api}/me`).pipe(
-      tap((user) => this.user.set(user)),
+      tap((user) => this.user.set(user))
     );
   }
 
@@ -74,7 +75,7 @@ export class AuthService {
     return this.user()?.role === 'admin';
   }
   
-  getUser(){
+  getUser(): WritableSignal<SafeUser | null> {
     return this.user;
   }
   

@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { AuthService, ToastService } from '../../services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+
+import { AuthService, ToastService } from '../../services';
 import { MessageResponse } from '../../interfaces';
 
 @Component({
@@ -26,9 +27,9 @@ export class ResetPassword implements OnInit {
   showPassword = signal(false);
   showConfirmPassword = signal(false);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
-    if (!this.token) this.router.navigate(['/forgot-password']); // A CHEQUEAR, PERO CREO QUE TIENE SENTIDO
+    if (!this.token) this.router.navigate(['/forgot-password']);
   }
 
   async submit(): Promise<void> {
@@ -57,19 +58,19 @@ export class ResetPassword implements OnInit {
     }
   }
 
-  togglePassword(){
+  togglePassword(): void {
     this.showPassword.update(v => !v);
   }
 
-  toggleConfirmPassword(){
+  toggleConfirmPassword(): void {
     this.showConfirmPassword.update(v => !v);
   }
 
-  mostrarMsjError() {
+  mostrarMsjError(): void {
     this.toastService.error({ message: this.error });
   }
 
-  mostrarMsjSuccess() {
-    this.toastService.success({ message: this.message.message });
+  mostrarMsjSuccess(): void {
+    this.toastService.success(this.message);
   }
 }

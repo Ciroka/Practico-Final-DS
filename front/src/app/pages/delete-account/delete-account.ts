@@ -3,8 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { UsersService, ToastService } from '../../services';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, UsersService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-delete-account',

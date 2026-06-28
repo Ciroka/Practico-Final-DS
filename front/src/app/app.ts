@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Navbar } from './shared/navbar/navbar';
-import { BottomNav } from './shared/bottom-nav/bottom-nav';
-import { Footer } from './shared/footer/footer';
+
 import { ToastComponent } from './shared/toast/toast';
+import { BottomNav } from './shared/bottom-nav/bottom-nav';
+import { Navbar } from './shared/navbar/navbar';
+import { Footer } from './shared/footer/footer';
 
 @Component({
   selector: 'app-root',

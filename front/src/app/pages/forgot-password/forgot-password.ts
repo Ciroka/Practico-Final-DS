@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthService, ToastService } from '../../services';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+
+import { AuthService, ToastService } from '../../services';
 import { MessageResponse } from '../../interfaces';
 
 @Component({
@@ -15,7 +16,7 @@ export class ForgotPasswordPage {
     private intervalId: ReturnType<typeof setInterval> | null = null;
     private unlocksAt: number | null = null;
     private toastService = inject(ToastService);
-    
+
     message = signal<MessageResponse | null>(null);
     email = '';
     secondsLeft = signal(20);
@@ -23,8 +24,8 @@ export class ForgotPasswordPage {
     ngOnInit(): void {
         this.startCoundown();
     }
-    
-    get canResend() {
+
+    get canResend(): boolean {
         return this.unlocksAt === null || Date.now() >= this.unlocksAt;
     }
 
@@ -33,7 +34,7 @@ export class ForgotPasswordPage {
 
         this.unlocksAt = Date.now() + 20000;
         this.startCoundown();
-        this.message.set(await firstValueFrom(this.authService.forgotPassword({email: this.email})));
+        this.message.set(await firstValueFrom(this.authService.forgotPassword({ email: this.email })));
         this.mostrarMsjInfo();
     }
 
@@ -55,12 +56,12 @@ export class ForgotPasswordPage {
         const diff = Math.ceil((this.unlocksAt - Date.now()) / 1000);
         this.secondsLeft.set(Math.max(0, diff));
     }
-    
-    ngOnDestroy() {
+
+    ngOnDestroy(): void {
         if (this.intervalId) clearInterval(this.intervalId);
     }
 
-    mostrarMsjInfo() {
-        this.toastService.info({message: this.message()!.message});
+    mostrarMsjInfo(): void {
+        this.toastService.info({ message: this.message()!.message });
     }
 }

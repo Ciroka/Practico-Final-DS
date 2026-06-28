@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
 import { CategoriesService, AuthService, ToastService } from '../../services';
-import { Category } from '../../models/category.model';
+import { Category } from '../../models';
 
 @Component({
   selector: 'app-categories',
@@ -92,7 +92,7 @@ export class CategoriesPage implements OnInit {
     }
   }
 
-  mostrarMsjError(error: string){
-    this.toastService.error({message: error});
+  mostrarMsjError(error: string): void {
+    this.toastService.error({ message: error });
   }
 }

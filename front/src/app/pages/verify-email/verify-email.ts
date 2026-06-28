@@ -23,7 +23,7 @@ export class VerifyEmail implements OnInit, OnDestroy {
   status = signal(false);
   loading = signal(true);
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     const token = this.route.snapshot.queryParamMap.get('token');
 
     if (!token) {
@@ -45,22 +45,22 @@ export class VerifyEmail implements OnInit, OnDestroy {
     } finally {
       this.loading.set(false);
       this.intervalId = setInterval(() => {
-        this.router.navigate(["/login"])
+        this.router.navigate(["/login"]);
         clearInterval(this.intervalId!);
         this.intervalId = null;
       }, 3000);
     }
   }
 
-  mostrarMsjExito() {
+  mostrarMsjExito(): void {
     this.toastService.success(this.message);
   }
 
-  mostrarMsjError() {
+  mostrarMsjError(): void {
     this.toastService.error(this.message);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 }

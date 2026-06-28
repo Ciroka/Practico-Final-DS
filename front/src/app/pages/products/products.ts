@@ -6,10 +6,8 @@ import { firstValueFrom } from 'rxjs';
 import { BottomSheet } from '../../shared/bottom-sheet/bottom-sheet';
 import { CreateProductDto, UpdateProductDto } from '../../interfaces';
 import { CategoriesService, ProductsService, AuthService, ToastService } from '../../services';
-import { Category } from '../../models/category.model';
-import { Product } from '../../models/product.model';
-import { SortEnum } from '../../types/sort.enum';
-import { OrderEnum } from '../../types/order.enum';
+import { Product, Category } from '../../models';
+import { SortEnum, OrderEnum } from '../../types';
 
 @Component({
   selector: 'app-products',
@@ -145,7 +143,7 @@ export class ProductsPage implements OnInit {
       this.cancelForm();
     } catch (err: any) {
       this.formError = 'Error al guardar el producto';
-      this.mostrarMsjError(this.formError)
+      this.mostrarMsjError(this.formError);
     }
   }
 
@@ -160,7 +158,7 @@ export class ProductsPage implements OnInit {
     }
   }
 
-  mostrarMsjError(error: string){
-    this.toastService.error({message: error});
+  mostrarMsjError(error: string): void {
+    this.toastService.error({ message: error });
   }
 }

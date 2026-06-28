@@ -23,11 +23,11 @@ export class VerifyPending implements OnInit {
     this.startCoundown();
   }
 
-  get canResend() {
+  get canResend(): boolean {
     return this.unlocksAt === null || Date.now() >= this.unlocksAt;
   }
 
-  async resend() {
+  async resend(): Promise<void> {
     if (!this.canResend) return;  
     this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
@@ -35,7 +35,7 @@ export class VerifyPending implements OnInit {
     this.mostrarMsjInfo(message);
   }
 
-  private startCoundown() {
+  private startCoundown(): void {
     if (this.intervalId) clearInterval(this.intervalId);
     this.updateSecondsLeft();
 
@@ -55,11 +55,11 @@ export class VerifyPending implements OnInit {
     this.secondsLeft.set(Math.max(0, diff));
   }
 
-  mostrarMsjInfo(message: MessageResponse) {
+  mostrarMsjInfo(message: MessageResponse): void {
     this.toastService.info(message);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 }
