@@ -17,7 +17,7 @@ export default [
     {
         name: "create_category",
         description: "Crear",
-        inputSchema: { name: z.string().min(2).max(100) },
+        inputSchema: { name: z.string().min(1).max(128) },
         handler: async (body: any) => api.post("/categories", body)
     },
     {
@@ -25,7 +25,7 @@ export default [
         description: "Actualizar",
         inputSchema: {
             id: z.number().int(),
-            name: z.string().min(2).max(100).optional()
+            name: z.string().min(1).max(128).optional()
         },
         handler: async ({ id ,...body }: any) => api.put(`/categories/${id}`, body)
     },

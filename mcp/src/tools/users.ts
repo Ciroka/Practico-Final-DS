@@ -13,9 +13,9 @@ export default [
         description: "Cambiar rol",
         inputSchema: {
             id: z.uuid(),
-            rol: z.enum(["admin", "user"])
+            role: z.enum(["admin", "user"])
         },
-        handler: async ({ id, ...body }: any) => api.patch(`/users/${id}/role`, body) //decia post en vez de dpatch
+        handler: async ({ id, ...body }: any) => api.patch(`/users/${id}/role`, body) 
     },
     {
         name: "update_my_password",

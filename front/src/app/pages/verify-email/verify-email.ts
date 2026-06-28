@@ -17,7 +17,7 @@ export class VerifyEmail implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private intervalId: ReturnType<typeof setInterval> | null = null;
-  private toastrService = inject(ToastService);
+  private toastService = inject(ToastService);
 
   message!: MessageResponse;
   status = signal(false);
@@ -53,11 +53,11 @@ export class VerifyEmail implements OnInit, OnDestroy {
   }
 
   mostrarMsjExito() {
-    this.toastrService.success(this.message);
+    this.toastService.success(this.message);
   }
 
   mostrarMsjError() {
-    this.toastrService.error(this.message);
+    this.toastService.error(this.message);
   }
 
   ngOnDestroy() {

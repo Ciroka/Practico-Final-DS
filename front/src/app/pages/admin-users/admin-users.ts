@@ -15,7 +15,7 @@ import { SafeUser, UserRole } from '../../interfaces';
 export class AdminUsersPage implements OnInit {
   private usersService = inject(UsersService);
   authService = inject(AuthService);
-  toastrService = inject(ToastService);
+  toastService = inject(ToastService);
 
   users = signal<SafeUser[]>([]);
   error = '';
@@ -43,6 +43,6 @@ export class AdminUsersPage implements OnInit {
   }
 
   mostrarMsjError() {
-    this.toastrService.error({ message: this.error });
+    this.toastService.error({ message: this.error });
   }
 }
