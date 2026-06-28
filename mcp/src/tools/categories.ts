@@ -21,16 +21,16 @@ export default [
         handler: async (body: any) => api.post("/categories", body)
     },
     {
-        name: "update_categories",
+        name: "update_category",
         description: "Actualizar",
         inputSchema: {
             id: z.number().int(),
             name: z.string().min(2).max(100).optional()
         },
-        handler: async ({ id ,...body }: any) => api.patch(`/products/${id}`, body)
+        handler: async ({ id ,...body }: any) => api.put(`/categories/${id}`, body)
     },
     {
-        name: "delete_categories",
+        name: "delete_category",
         description: "Eliminar",
         inputSchema: { id: z.number().int() },
         handler: async ({id}: any) => api.del(`/categories/${id}`)

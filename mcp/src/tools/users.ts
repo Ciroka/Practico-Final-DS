@@ -15,7 +15,7 @@ export default [
             id: z.uuid(),
             rol: z.enum(["admin", "user"])
         },
-        handler: async ({ id, ...body }: any) => api.post(`/users/${id}/role`, body)
+        handler: async ({ id, ...body }: any) => api.patch(`/users/${id}/role`, body) //decia post en vez de dpatch
     },
     {
         name: "update_my_password",

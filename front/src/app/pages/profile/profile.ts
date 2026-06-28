@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
+import { MessageResponse } from '../../interfaces';
+import { ToastService } from '../../services';
 
 @Component({
   selector: 'app-profile',
@@ -12,11 +14,14 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './profile.css',
 })
 export class ProfilePage implements OnInit, OnDestroy {
-  authService = inject(AuthService);
-  user = this.authService.getUser();
-  private unlocksAt: number | null = null;
-  secondsLeft = signal(20);
   private intervalId: ReturnType<typeof setInterval> | null = null;
+  private unlocksAt: number | null = null;
+  private toastService = inject(ToastService);
+
+  authService = inject(AuthService);
+  secondsLeft = signal(20);
+  user = this.authService.getUser();
+  message!: MessageResponse;
 
   ngOnInit(): void {
     this.startCoundown();
@@ -30,7 +35,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     if (!this.canResend) return;
     this.unlocksAt = Date.now() + 20000;
     this.startCoundown();
-    await firstValueFrom(this.authService.resendVerification());
+    this.message = await firstValueFrom(this.authService.resendVerification());
+    this.mostrarMsjInfo();
   }
 
   private startCoundown() {
@@ -56,7 +62,16 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
+  maskEmail(): string {
+    const [user, domain] = this.user()!.email.split('@');
+    return `${user[0]}***${user[user.length - 1]}@${domain}`;
+  }
+
   ngOnDestroy() {
     if (this.intervalId) clearInterval(this.intervalId);
+  }
+
+  mostrarMsjInfo(){
+    this.toastService.info(this.message);
   }
 }

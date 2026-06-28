@@ -41,7 +41,7 @@ export class CategoriesController {
     
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.ADMIN)
-    @Put(':id')
+    @Put(':id') 
     async update(@Param('id') id: string, @Body() body: UpdateCategoryDto) {
         return this.categoriesService.update(Number(id), body);
     }

@@ -33,7 +33,7 @@ export default [
         handler: async (body: any) => api.post("/products", body)
     },
     {
-        name: "update_products",
+        name: "update_product",
         description: "Actualizar",
         inputSchema: {
             id: z.number().int(),
@@ -45,7 +45,7 @@ export default [
         handler: async ({ id, ...body }: any) => api.put(`/products/${id}`, body)
     },
     {
-        name: "delete_products",
+        name: "delete_product",
         description: "Eliminar",
         inputSchema: { id: z.number().int() },
         handler: async ({ id }: any) => api.del(`/products/${id}`)

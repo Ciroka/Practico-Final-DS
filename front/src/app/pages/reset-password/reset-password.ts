@@ -23,6 +23,8 @@ export class ResetPassword implements OnInit {
   token: string | null = '';
   loading = signal(false);
   message!: MessageResponse;
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
 
   ngOnInit() {
     this.token = this.route.snapshot.queryParamMap.get('token');
@@ -53,6 +55,14 @@ export class ResetPassword implements OnInit {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  togglePassword(){
+    this.showPassword.update(v => !v);
+  }
+
+  toggleConfirmPassword(){
+    this.showConfirmPassword.update(v => !v);
   }
 
   mostrarMsjError() {

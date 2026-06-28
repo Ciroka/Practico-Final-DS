@@ -25,36 +25,34 @@
             </div>
           </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label fw-medium">Contraseña (mín. 8 caracteres)</label>
+          <div class="mb-4">
+            <label for="password" class="form-label fw-medium">Contraseña</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-lock"></i></span>
-              <input
-                id="password"
-                type="password"
-                class="form-control"
-                [(ngModel)]="password"
-                name="password"
-                required
-                minlength="8"
-                placeholder="••••••••"
-              />
+              <input id="password" [type]="showPassword() ? 'text' : 'password'" class="form-control"
+                [(ngModel)]="password" name="password" required placeholder="••••••••" />
+              <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                <i [class]="showPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              </button>
             </div>
           </div>
 
           <div class="mb-4">
             <label for="confirmPassword" class="form-label fw-medium">Confirmar contraseña</label>
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
               <input
                 id="confirmPassword"
-                type="password"
+                [type]="showConfirmPassword() ? 'text' : 'password'"
                 class="form-control"
                 [(ngModel)]="confirmPassword"
                 name="confirmPassword"
                 required
                 placeholder="••••••••"
               />
+              <button class="btn btn-outline-secondary" type="button" (click)="toggleConfirmPassword()">
+                <i [class]="showConfirmPassword() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              </button>
             </div>
           </div>
 

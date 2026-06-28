@@ -20,7 +20,10 @@ export class RegisterPage {
   password = '';
   confirmPassword = '';
   error = '';
+  message = '';
   loading = signal(false);
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
 
   async submit(): Promise<void> {
     this.error = '';
@@ -35,6 +38,8 @@ export class RegisterPage {
 
     try {
       await firstValueFrom(this.authService.register({ email: this.email, password: this.password }));
+      this.message = 'Revisá tu email. Te enviamos un link de verificación'
+      this.mostrarMsjInfo();
       this.router.navigate(['/verify-pending']);
     } catch (err: any) {
       this.error = 'Error al registrarse';
@@ -44,7 +49,19 @@ export class RegisterPage {
     }
   }
 
+  mostrarMsjInfo(){
+    this.toastService.info({message: this.message})
+  }
+
   mostrarMsjError() {
     this.toastService.error({message: this.error});
+  }
+
+  togglePassword(): void {
+    this.showPassword.update(v => !v);
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword.update(v => !v);
   }
 }

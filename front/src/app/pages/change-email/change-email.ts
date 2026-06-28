@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { UsersService, ToastService } from '../../services';
+import { UsersService, ToastService, AuthService } from '../../services';
 
 @Component({
   selector: 'app-change-email',
@@ -15,6 +15,7 @@ export class ChangeEmail {
   private usersService = inject(UsersService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   error = '';
   newEmail = '';
@@ -31,7 +32,7 @@ export class ChangeEmail {
         })
       );
       this.mostrarMsjExito(res.message);
-      setTimeout(() => this.router.navigate(['/login']), 3000);
+      this.authService.logout();
     } catch (err: any) {
       this.error = err?.error?.message ?? 'Error al cambiar el email';
       this.mostrarMsjError();

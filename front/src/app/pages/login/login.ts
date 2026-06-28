@@ -20,6 +20,7 @@ export class LoginPage {
   password = '';
   error = '';
   loading = signal(false);
+  showPassword = signal(false);
 
   async submit(): Promise<void> {
     this.error = '';
@@ -37,5 +38,9 @@ export class LoginPage {
 
   mostrarMsjError() {
     this.toastService.error({ message: this.error });
+  }
+
+  togglePassword(): void {
+    this.showPassword.update(v => !v);
   }
 }
