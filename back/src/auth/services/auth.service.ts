@@ -108,12 +108,10 @@ export class AuthService {
         await this.usersService.update(user);
         await this.emailSenderService.sendEmailVerification(token, user.email);
 
-        return {
-            message: "Email enviado"
-        }
+        return { message: "Email enviado" };
     }
 
-    async verifyEmail(verificationToken: string):Promise<UserMessageResponse> {
+    async verifyEmail(verificationToken: string): Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByVerificationToken(verificationToken);
         if(!user) throw new BadRequestException("Token inválido o expirado");
 
@@ -136,7 +134,7 @@ export class AuthService {
         return { message: "Si el email existe, recibirás un link" };
     }
 
-    async resetPassword(token: string, password: string):Promise<UserMessageResponse> {
+    async resetPassword(token: string, password: string): Promise<UserMessageResponse> {
         const user = await this.usersService.findOneByResetPasswordToken(token);
 
         if(!user || !user.resetPasswordExpires || user.resetPasswordExpires < new Date()) {

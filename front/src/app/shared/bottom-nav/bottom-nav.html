@@ -1,5 +1,5 @@
 <nav class="bottom-nav d-md-none">
-  @if (auth.isAuthenticated()) {
+  @if (auth.isAuthenticated() && auth.user()) { <!-- AGREGUÉ && auth.user() -->
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
       <i class="bi bi-house"></i>
       <span>Inicio</span>

@@ -7,7 +7,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        @if (auth.isAuthenticated()) {
+        @if (auth.isAuthenticated() && auth.user()) { <!-- AGREGUÉ && auth.user() -->
           <li class="nav-item">
             <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
               <i class="bi bi-house me-1"></i>Inicio
@@ -34,7 +34,7 @@
       </ul>
 
       <ul class="navbar-nav">
-        @if (auth.isAuthenticated()) {
+        @if (auth.isAuthenticated() && auth.user()) { <!-- AGREGUÉ && auth.user() -->
           <li class="nav-item">
             <a class="nav-link" routerLink="/profile" routerLinkActive="active">
               <i class="bi bi-person-circle me-1"></i>

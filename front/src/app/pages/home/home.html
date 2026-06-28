@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  @if (!auth.isAuthenticated()) {
+  @if (!auth.isAuthenticated() || !auth.user()) { <!-- AGREGUÉ && !auth.user() -->
     <div class="text-center py-5">
       <h1 class="display-4 fw-bold" style="color: var(--dark)">
         <i class="bi bi-box-seam me-2"></i>Frontend API

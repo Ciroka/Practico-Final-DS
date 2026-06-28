@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { firstValueFrom} from 'rxjs';
 
 import { AuthService, ToastService } from '../../services';
@@ -6,7 +7,7 @@ import { MessageResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-verify-pending',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './verify-pending.html',
   styleUrl: './verify-pending.css',
 })
