@@ -26,6 +26,7 @@ export class ResetPassword implements OnInit {
 
   ngOnInit() {
     this.token = this.route.snapshot.queryParamMap.get('token');
+    if (!this.token) this.router.navigate(['/forgot-password']); // A CHEQUEAR, PERO CREO QUE TIENE SENTIDO
   }
 
   async submit(): Promise<void> {

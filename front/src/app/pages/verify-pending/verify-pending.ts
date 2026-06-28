@@ -36,6 +36,7 @@ export class VerifyPending implements OnInit {
   }
 
   private startCoundown() {
+    if (this.intervalId) clearInterval(this.intervalId);
     this.updateSecondsLeft();
 
     this.intervalId = setInterval(() => {

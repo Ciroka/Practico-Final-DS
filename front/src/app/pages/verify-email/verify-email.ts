@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { MessageResponse } from '../../interfaces';
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
 })
-export class VerifyEmail implements OnInit {
+export class VerifyEmail implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -58,5 +58,9 @@ export class VerifyEmail implements OnInit {
 
   mostrarMsjError() {
     this.toastrService.error(this.message);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 }

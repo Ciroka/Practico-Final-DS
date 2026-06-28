@@ -18,7 +18,7 @@ export class AuthService {
   ) {
     const token = this.getToken();
     if (token) {
-      this.me().subscribe();
+      this.me().subscribe({ error: () => this.clearToken() }); // ESTO ARREGLA EL ERROR DE me(), expira el token, y tira error pero te deja navegar. Con esto, te logueas devuelta
     }
   }
 
