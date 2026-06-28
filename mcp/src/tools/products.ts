@@ -39,10 +39,7 @@ export default [
             id: z.number().int(),
             name: z.string().min(1).max(256).optional(),
             price: z.number().positive()
-            .refine(
-                (v: number) => Number.isInteger(v * 10000),
-                "Máximo 4 decimales"
-                    ),
+                    .refine((v: number) => Number.isInteger(v * 10000), "Máximo 4 decimales").optional(),
             stock: z.number().int().min(0).optional(),
             categoryId: z.number().int().optional()
         },
