@@ -121,8 +121,6 @@ El pipeline CI se ejecuta en cada **push** a cualquier rama y en cada **Pull Req
 - `npm install` — instalación de dependencias
 - `npm run build` — `ng build` (detecta errores de TypeScript y templates)
 
-> ⚠️ El frontend no tiene tests configurados con entorno headless en este proyecto. En una implementación real se agregaría Karma + ChromeHeadless o Jest con Angular Testing Library. El sistema de toasts es propio (sin ngx-toastr), implementado con Signals de Angular y clases Bootstrap.
-
 **MCP (`mcp/`)**
 - `npm install` — instalación de dependencias
 - `npm run build` — compilación TypeScript
@@ -142,44 +140,44 @@ El pipeline CI se ejecuta en cada **push** a cualquier rama y en cada **Pull Req
 
 **Staging (automático):**
 ```
-merge a develop
-       │
-       ▼
-CI pasa ✅
-       │
-       ▼
-Deploy automático a staging
-       │
-       ▼
+          merge a develop
+                 │
+                 ▼
+             CI pasa ✅
+                 │
+                 ▼
+     Deploy automático a staging
+                 │
+                 ▼
 Smoke tests básicos (ping al /auth/me)
-       │
-       ▼
-Notificación al equipo
+                 │
+                 ▼
+       Notificación al equipo
 ```
 
 **Producción (con aprobación):**
 ```
-merge a main (via release o hotfix)
-       │
-       ▼
-CI pasa ✅
-       │
-       ▼
-⏸ Espera aprobación manual en GitHub
-       │
-       ▼ (aprobado)
-Backup de base de datos
-       │
-       ▼
-Deploy backend
-       │
-       ▼
-Deploy frontend (build estático)
-       │
-       ▼
-Health check de endpoints críticos
-       │
-       ▼
+    merge a main (via release o hotfix)
+                    │
+                    ▼
+                CI pasa ✅
+                    │
+                    ▼
+    Espera aprobación manual en GitHub
+                    │
+                    ▼ (aprobado)
+         Backup de base de datos
+                    │
+                    ▼
+              Deploy backend
+                    │
+                    ▼
+      Deploy frontend (build estático)
+                    │
+                    ▼
+     Health check de endpoints críticos
+                    │
+                    ▼
 Notificación de éxito o rollback automático
 ```
 
@@ -193,17 +191,90 @@ Si el deploy a producción falla o los health checks no pasan:
 ---
 
 ## 5. Diagrama de Flujo Completo
-
+ 
+### 5.1 Estrategia de Ramas GitFlow
+ 
+```mermaid
+gitGraph
+   commit id: "init"
+ 
+   branch develop
+   checkout develop
+   commit id: "setup proyecto"
+ 
+   branch feature/back-reset-password
+   checkout feature/back-reset-password
+   commit id: "feat: forgot-password endpoint"
+   commit id: "feat: reset-password endpoint"
+   checkout develop
+   merge feature/back-reset-password id: "merge reset-password"
+ 
+   branch feature/front-verify-email
+   checkout feature/front-verify-email
+   commit id: "feat: verify-pending page"
+   commit id: "feat: verify-email page"
+   checkout develop
+   merge feature/front-verify-email id: "merge verify-email"
+ 
+   branch feature/front-change-password
+   checkout feature/front-change-password
+   commit id: "feat: change-password page"
+   commit id: "feat: change-email page"
+   checkout develop
+   merge feature/front-change-password id: "merge change-password"
+ 
+   branch feature/front-delete-account
+   checkout feature/front-delete-account
+   commit id: "feat: delete-account page"
+   checkout develop
+   merge feature/front-delete-account id: "merge delete-account"
+ 
+   branch fix/product-category-nullable
+   checkout fix/product-category-nullable
+   commit id: "fix: nullable categoryId en ProductEntity"
+   checkout develop
+   merge fix/product-category-nullable id: "merge fix categoryId"
+ 
+   branch feature/mcp-products-categories
+   checkout feature/mcp-products-categories
+   commit id: "feat: tools products CRUD"
+   commit id: "feat: tools categories CRUD"
+   commit id: "feat: tools users"
+   checkout develop
+   merge feature/mcp-products-categories id: "merge mcp tools"
+ 
+   branch release/1.0.0
+   checkout release/1.0.0
+   commit id: "chore: bump version 1.0.0"
+   commit id: "docs: README y CI/CD proposal"
+   checkout main
+   merge release/1.0.0 id: "release 1.0.0" tag: "v1.0.0"
+   checkout develop
+   merge release/1.0.0 id: "sync develop"
+ 
+   checkout main
+   branch hotfix/fix-jwt-token-not-cleared
+   commit id: "fix: limpiar token si me() falla"
+   checkout main
+   merge hotfix/fix-jwt-token-not-cleared id: "hotfix aplicado" tag: "v1.0.1"
+   checkout develop
+   merge hotfix/fix-jwt-token-not-cleared id: "sync hotfix a develop"
+```
+ 
+---
+ 
+### 5.2 Pipeline CI/CD
+ 
 ```mermaid
 flowchart TD
-    DEV[👨‍💻 Developer] -->|git push feature/xxx| FEATURE[rama feature/xxx]
+    DEV[Developer] -->|git push feature/xxx| FEATURE[rama feature/xxx]
     FEATURE -->|Pull Request| PR_DEV{PR hacia develop}
     PR_DEV -->|CI falla ❌| FIX[Corregir y pushear]
     FIX --> FEATURE
     PR_DEV -->|CI pasa ✅ + aprobación| DEVELOP[rama develop]
     DEVELOP -->|Deploy automático| STAGING[🔵 Ambiente Staging]
-    STAGING -->|Smoke tests ok| NOTIFY_TEAM[📢 Notificar equipo]
-    
+    STAGING -->|Smoke tests ok| NOTIFY_TEAM[Notificar equipo]
+ 
     DEVELOP -->|Crear rama release/vX.Y.Z| RELEASE[rama release/vX.Y.Z]
     RELEASE -->|Ajustes finales, bump version| RELEASE
     RELEASE -->|Pull Request| PR_MAIN{PR hacia main}
@@ -215,11 +286,12 @@ flowchart TD
     MAIN -->|Deploy| PROD[🟢 Producción]
     PROD -->|Health checks ok| SUCCESS[✅ Deploy exitoso]
     PROD -->|Health checks fallan| ROLLBACK[🔄 Rollback automático]
-    
-    BUG[🐛 Bug crítico en prod] -->|rama hotfix/xxx desde main| HOTFIX[rama hotfix/xxx]
+ 
+    BUG[Bug crítico en prod] -->|rama hotfix/xxx desde main| HOTFIX[rama hotfix/xxx]
     HOTFIX -->|CI + aprobación express| MAIN
     HOTFIX -->|también merge| DEVELOP
 ```
+ 
 
 ---
 
@@ -233,14 +305,14 @@ name: CI — Integración Continua
 on:
   push:
     branches:
-      - '**'           # Todos los pushes
+      - '**'  # Todos los pushes
   pull_request:
     branches:
       - develop
       - main
 
 jobs:
-  # ─── Backend ───────────────────────────────────────────────
+  # Backend
   ci-back:
     name: CI Backend (NestJS)
     runs-on: ubuntu-latest
@@ -294,7 +366,7 @@ jobs:
         working-directory: back
         run: npm run build
 
-  # ─── Frontend ──────────────────────────────────────────────
+  # Frontend
   ci-front:
     name: CI Frontend (Angular)
     runs-on: ubuntu-latest
@@ -318,7 +390,7 @@ jobs:
         working-directory: front
         run: npm run build
 
-  # ─── MCP ───────────────────────────────────────────────────
+  # MCP
   ci-mcp:
     name: CI MCP Server
     runs-on: ubuntu-latest
@@ -353,7 +425,7 @@ on:
     branches:
       - develop
 
-needs: [ci-back, ci-front, ci-mcp]   # Solo si CI pasa
+needs: [ci-back, ci-front, ci-mcp] # Solo si CI pasa
 
 jobs:
   deploy-staging:
@@ -380,7 +452,7 @@ jobs:
           curl --fail https://staging.practico-ds.com/auth/me || exit 1
 
       - name: Notificar éxito
-        run: echo "✅ Deploy a staging exitoso"
+        run: echo "Deploy a staging exitoso"
 ```
 
 ### `.github/workflows/cd-production.yml`
@@ -397,7 +469,7 @@ jobs:
   deploy-production:
     name: Deploy Producción
     runs-on: ubuntu-latest
-    environment: production   # Requiere aprobación manual configurada en GitHub
+    environment: production # Requiere aprobacion manual configurada en GitHub
 
     steps:
       - name: Checkout
@@ -421,7 +493,7 @@ jobs:
           curl --fail https://practico-ds.com/auth/me || exit 1
 
       - name: Notificar éxito
-        run: echo "🚀 Deploy a producción exitoso"
+        run: echo "Deploy a producción exitoso"
 ```
 
 ---
