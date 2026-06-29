@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateCategoryDto } from '../dto';
@@ -24,6 +24,10 @@ export class CategoryRepository implements ICategoriesRepository {
     }
 
     async create(input: CreateCategoryDto): Promise<CategoryEntity> {
+        const exists = await this.categoriesRepository.existsBy({ name: input.name });
+        if (exists) {
+            throw new ConflictException('Categoría con nombre duplicado.');
+        }
         const category = this.categoriesRepository.create(input);
         return this.categoriesRepository.save(category);
     }
