@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { UsersService, ToastService, AuthService } from '../../services';
@@ -14,7 +14,6 @@ import { UsersService, ToastService, AuthService } from '../../services';
 export class ChangeEmail {
   private usersService = inject(UsersService);
   private toastService = inject(ToastService);
-  private router = inject(Router);
   private authService = inject(AuthService);
 
   error = '';
