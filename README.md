@@ -515,18 +515,3 @@ Las variables sensibles **nunca van en el código**. Se configuran como **secret
 Se agregan en: **GitHub repo → Settings → Secrets and variables → Actions**
 
 ---
-
-## 8. Reflexión — Cómo fue el desarrollo real
-
-Durante el desarrollo de este proyecto se trabajó de forma **no estructurada** en git: clones directos, force pushes, commits sin convención y sin ramas de feature. Esto generó:
-
-- Dificultad para identificar qué commit introdujo un bug
-- Imposibilidad de trabajar en paralelo sin pisar cambios del otro
-- Merges conflictivos sin historial claro
-
-Con la estrategia GitFlow propuesta y este pipeline de CI/CD, estos problemas se evitan porque:
-
-- Cada feature vive aislada en su rama hasta estar lista
-- El CI bloquea código roto antes de llegar a `develop`
-- El historial de commits es legible y trazable
-- Producción nunca recibe código no aprobado
