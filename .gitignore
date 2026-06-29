@@ -4,3 +4,4 @@ docs/
 front/.angular
 back/dist
 .vscode
+.DS_Store
