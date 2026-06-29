@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../shared/guards';
 import {
@@ -29,6 +29,7 @@ export class AuthController {
         return this.authService.login(userLogin);
     }
 
+    @HttpCode(HttpStatus.OK)
     @UseGuards(JwtAuthGuard)
     @Post('resend-verification')
     async resendVerification(@Request() req: any): Promise<UserMessageResponse> {
