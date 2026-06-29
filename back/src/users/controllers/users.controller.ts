@@ -33,8 +33,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Patch(':id/role')
-  async updateRole(@Param('id') id: string, @Body() dto: UpdateUserRoleDto): Promise<UserResponse> {
-    return this.usersService.updateRole(id, dto);
+  async updateRole(@Request() req: any, @Param('id') id: string, @Body() dto: UpdateUserRoleDto): Promise<UserResponse> {
+    return this.usersService.updateRole(req.user.sub, id, dto);
   }
 
   @UseGuards(JwtAuthGuard)

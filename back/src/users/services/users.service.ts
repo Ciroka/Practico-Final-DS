@@ -1,4 +1,4 @@
-import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DeepPartial } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -73,7 +73,8 @@ export class UsersService {
     return this.usersRepository.existsByEmail(email.trim().toLowerCase());
   }
 
-  async updateRole(id: string, dto: UpdateUserRoleDto): Promise<UserEntity> {
+  async updateRole(adminId: string, id: string, dto: UpdateUserRoleDto): Promise<UserEntity> {
+    if (adminId === id) throw new ForbiddenException('No se puede cambiar rol propio.');
     const user = await this.findOneById(id);
     user.role = dto.role;
     return this.usersRepository.update(user);
