@@ -44,7 +44,11 @@ export class ProductsRepository implements IProductsRepository {
 
     async create(input: CreateProductDto): Promise<ProductEntity> {
         const product = await this.productsRepository.save(input);
-        return product;
+        const productWithCategory = await this.productsRepository.findOne({
+            where: { id: product.id },
+            relations: { category: true }
+        });
+        return productWithCategory!;
     }
 
     async update(product: ProductEntity): Promise<ProductEntity> {
