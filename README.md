@@ -24,7 +24,54 @@ Practico-Final-DS/
 
 ---
 
-## 2. Estrategia de Ramas — GitFlow
+## 2. Cómo correr el proyecto
+
+### Requisitos previos
+
+- Node.js 22
+- Docker y Docker Compose
+- Servicio de email (cuenta SMTP, Gmail, Resend, etc.)
+
+### Instalación
+
+**1. Instalar dependencias**
+```bash
+npm install
+cd back && npm install && cd ..
+cd front && npm install && cd ..
+cd mcp && npm install && cd ..
+```
+
+**2. Configurar variables de entorno**
+```bash
+cp back/.env.example back/.env
+# Editar back/.env con los datos reales
+```
+
+**3. Correr el proyecto completo**
+```bash
+npm run start
+```
+
+Esto levanta automáticamente, en orden:
+- Docker Compose con PostgreSQL y pgAdmin (vía hook `preback`)
+- Backend NestJS en `http://localhost:3000`
+- Frontend Angular en `http://localhost:4200`
+
+Para detener Docker al terminar:
+```bash
+npm run stop
+```
+
+Para el servidor MCP:
+```bash
+cd mcp && npx tsx src/index.ts
+```
+
+---
+
+## 3. Estrategia de Ramas — GitFlow
+
 
 ### Ramas principales
 
@@ -50,14 +97,14 @@ feature/front-change-password    # Formulario cambio de contraseña desde perfil
 feature/front-delete-account     # Página eliminación de cuenta
 feature/back-reset-password      # Endpoints forgot/reset password en NestJS
 feature/mcp-products-categories  # Tools MCP para products y categories
-hotfix/fix-jwt-token-not-cleared # Token no se limpiaba al expirar
+hotfix/fix-jwt-token-not-cleared # Token no se limpiaba al expirar (BUG-012)
 chore/remove-unused-imports      # Limpieza de imports innecesarios
 release/1.0.0                    # Versión final para entrega
 ```
 
 ### Reglas de la estrategia
 
-- **Nadie commitea directo a `main` ni a `develop`**, todo entra por Pull Request
+- **Nadie commitea directo a `main` ni a `develop`** — todo entra por Pull Request
 - **PRs a `develop`** requieren al menos 1 aprobación
 - **PRs a `main`** requieren 2 aprobaciones y que el pipeline CI pase completo
 - **Hotfix** es la única excepción: puede mergearse con aprobación express ante un bug crítico en producción
@@ -71,7 +118,7 @@ release/1.0.0                    # Versión final para entrega
 
 ---
 
-## 3. Pipeline de Integración Continua (CI)
+## 4. Pipeline de Integración Continua (CI)
 
 El pipeline CI se ejecuta en cada **push** a cualquier rama y en cada **Pull Request** hacia `develop` o `main`.
 
