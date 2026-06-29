@@ -15,8 +15,8 @@ export class ProductEntity {
     @Column({ type: 'int', default: 0 })
     stock!: number;
 
-    @Column({ name: 'category_id' })
-    categoryId?: number;
+    @Column({ name: 'category_id', nullable: true })
+    categoryId?: number | null;
     
     @ManyToOne(() => CategoryEntity, { onDelete: 'RESTRICT' })
     @JoinColumn({ name: 'category_id' })

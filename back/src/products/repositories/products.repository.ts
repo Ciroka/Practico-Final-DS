@@ -65,7 +65,7 @@ export class ProductsRepository implements IProductsRepository {
     
     private queryBuilder(categoryId?: number, name?: string, sortBy?: SortEnum, order: OrderEnum = OrderEnum.ASC) {
         const query = this.productsRepository.createQueryBuilder('product')
-                                                .innerJoinAndSelect('product.category', 'category');
+                                                .leftJoinAndSelect('product.category', 'category');
 
         if (name) {
             query.where('product.name ILIKE :name', { name: `%${name}%` });
