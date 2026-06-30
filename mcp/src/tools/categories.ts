@@ -33,6 +33,6 @@ export default [
         name: "delete_category",
         description: "Eliminar",
         inputSchema: { id: z.number().int() },
-        handler: async ({id}: any) => api.del(`/categories/${id}`)
+        handler: async ({ id }: any) => api.del(`/categories/${id}`)
     }
 ] as ToolDef[];

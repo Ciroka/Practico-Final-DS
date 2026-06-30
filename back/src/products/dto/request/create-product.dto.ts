@@ -7,7 +7,7 @@ export class CreateProductDto {
     @MaxLength(256) 
     name!: string;
     
-    @IsNumber({maxDecimalPlaces: 4})
+    @IsNumber({ maxDecimalPlaces: 4 })
     @IsPositive()
     price!: number;
     
