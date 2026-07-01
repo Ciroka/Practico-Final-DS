@@ -27,7 +27,7 @@ export default [
         inputSchema: {
             name: z.string().min(1).max(256),
             price: z.number().positive()
-                    .refine((v: number) => Number.isInteger(v * 10000), "Máximo 4 decimales").optional(),
+                    .refine((v: number) => Number.isInteger(v * 10000), "Máximo 4 decimales"),
             stock: z.number().int().min(0).optional().default(0),
             categoryId: z.number().int().optional()
         },
